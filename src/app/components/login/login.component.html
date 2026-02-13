@@ -1,0 +1,124 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="logo-section">
+        <div class="logo-icon">📦</div>
+        <h2 class="brand-name">TradeHub</h2>
+      </div>
+      <h1>Welcome Back</h1>
+      <p>Manage your export/import operations seamlessly</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Enter your email"
+          class="form-input"
+          [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+        />
+        <span class="error-message" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+          <span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required</span>
+          <span *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+        </span>
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <div class="password-header">
+          <label for="password">Password</label>
+          <a href="#!" class="forgot-password">Forgot?</a>
+        </div>
+        <div class="password-input-wrapper">
+          <input
+            id="password"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Enter your password"
+            class="form-input"
+            [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+          />
+          <button
+            type="button"
+            class="toggle-password"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+          >
+            <i class="icon">{{ showPassword ? '👁️' : '👁️‍🗨️' }}</i>
+          </button>
+        </div>
+        <span class="error-message" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+          <span *ngIf="loginForm.get('password')?.errors?.['required']">Password is required</span>
+          <span *ngIf="loginForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters</span>
+        </span>
+      </div>
+
+      <!-- Remember Me -->
+      <div class="checkbox-group">
+        <input id="remember" type="checkbox" />
+        <label for="remember">Remember me</label>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn-primary" [disabled]="!loginForm.valid">
+        Sign In
+      </button>
+    </form>
+
+    <!-- Signup Link -->
+    <div class="signup-link">
+      Don't have an account? <a routerLink="/register">Sign Up</a>
+    </div>
+
+    <!-- Divider -->
+    <div class="divider">
+      <span>or continue with</span>
+    </div>
+
+    <!-- Social Login -->
+    <div class="social-login">
+      <button type="button" class="btn-social btn-google" (click)="loginWithGoogle()" [disabled]="isLoading">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="12" cy="12" r="10"></circle>
+        </svg>
+        <span *ngIf="!isLoading">Google</span>
+        <span *ngIf="isLoading" class="loading-text">Connecting...</span>
+      </button>
+      <button type="button" class="btn-social btn-linkedin" (click)="loginWithLinkedIn()" [disabled]="isLoading">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <rect x="2" y="2" width="20" height="20" rx="5"></rect>
+        </svg>
+        <span *ngIf="!isLoading">LinkedIn</span>
+        <span *ngIf="isLoading" class="loading-text">Connecting...</span>
+      </button>
+    </div>
+
+    <!-- Footer Info -->
+    <div class="card-footer">
+      <p>Trusted by 5000+ trading companies worldwide</p>
+    </div>
+  </div>
+
+  <!-- Side Features -->
+  <div class="features-section" *ngIf="true">
+    <div class="feature-item">
+      <div class="feature-icon">✓</div>
+      <h3>Real-time Tracking</h3>
+      <p>Monitor shipments in real-time</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">📊</div>
+      <h3>Analytics Dashboard</h3>
+      <p>Detailed reports and insights</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">🔒</div>
+      <h3>Secure Platform</h3>
+      <p>Enterprise-grade security</p>
+    </div>
+  </div>
+</div>

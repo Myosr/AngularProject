@@ -1,0 +1,176 @@
+<div class="register-container">
+  <div class="register-card">
+    <div class="register-header">
+      <div class="logo-section">
+        <div class="logo-icon">📦</div>
+        <h2 class="brand-name">TradeHub</h2>
+      </div>
+      <h1>Create Account</h1>
+      <p>Join thousands of traders and start managing your shipments today</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+      <!-- First Name Field -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input
+            id="firstName"
+            type="text"
+            formControlName="firstName"
+            placeholder="John"
+            class="form-input"
+            [class.error]="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched"
+          />
+          <span class="error-message" *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
+            <span *ngIf="registerForm.get('firstName')?.errors?.['required']">First name is required</span>
+            <span *ngIf="registerForm.get('firstName')?.errors?.['minlength']">Minimum 2 characters required</span>
+          </span>
+        </div>
+
+        <!-- Last Name Field -->
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input
+            id="lastName"
+            type="text"
+            formControlName="lastName"
+            placeholder="Doe"
+            class="form-input"
+            [class.error]="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched"
+          />
+          <span class="error-message" *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched">
+            <span *ngIf="registerForm.get('lastName')?.errors?.['required']">Last name is required</span>
+            <span *ngIf="registerForm.get('lastName')?.errors?.['minlength']">Minimum 2 characters required</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="john@example.com"
+          class="form-input"
+          [class.error]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+        />
+        <span class="error-message" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+          <span *ngIf="registerForm.get('email')?.errors?.['required']">Email is required</span>
+          <span *ngIf="registerForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+        </span>
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-input-wrapper">
+          <input
+            id="password"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Create a strong password"
+            class="form-input"
+            [class.error]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+          />
+          <button
+            type="button"
+            class="toggle-password"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+          >
+            <i class="icon">{{ showPassword ? '👁️' : '👁️‍🗨️' }}</i>
+          </button>
+        </div>
+        <span class="error-message" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+          <span *ngIf="registerForm.get('password')?.errors?.['required']">Password is required</span>
+          <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Password must be at least 8 characters</span>
+        </span>
+      </div>
+
+      <!-- Confirm Password Field -->
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <div class="password-input-wrapper">
+          <input
+            id="confirmPassword"
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            formControlName="confirmPassword"
+            placeholder="Confirm your password"
+            class="form-input"
+            [class.error]="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched"
+          />
+          <button
+            type="button"
+            class="toggle-password"
+            (click)="toggleConfirmPasswordVisibility()"
+            [attr.aria-label]="showConfirmPassword ? 'Hide password' : 'Show password'"
+          >
+            <i class="icon">{{ showConfirmPassword ? '👁️' : '👁️‍🗨️' }}</i>
+          </button>
+        </div>
+        <span class="error-message" *ngIf="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched">
+          <span *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">Please confirm your password</span>
+          <span *ngIf="registerForm.get('confirmPassword')?.errors?.['passwordMismatch']">Passwords do not match</span>
+        </span>
+      </div>
+
+      <!-- Terms & Conditions -->
+      <div class="checkbox-group">
+        <input
+          id="terms"
+          type="checkbox"
+          formControlName="terms"
+          required
+        />
+        <label for="terms">
+          I agree to the <a href="#!" class="terms-link">Terms & Conditions</a> and <a href="#!" class="terms-link">Privacy Policy</a>
+          <span class="required-asterisk">*</span>
+        </label>
+      </div>
+      <span class="error-message" *ngIf="registerForm.get('terms')?.invalid && registerForm.get('terms')?.touched">
+        You must accept the terms and conditions
+      </span>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn-primary" [disabled]="!registerForm.valid">
+        Create Account
+      </button>
+    </form>
+
+    <!-- Login Link -->
+    <div class="login-link">
+      Already have an account? <a routerLink="/login">Sign In</a>
+    </div>
+
+    <!-- Divider -->
+    <div class="divider">
+      <span>or sign up with</span>
+    </div>
+
+    <!-- Social Register -->
+    <div class="social-login">
+      <button type="button" class="btn-social btn-google" (click)="registerWithGoogle()" [disabled]="isLoading">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="12" cy="12" r="10"></circle>
+        </svg>
+        <span *ngIf="!isLoading">Google</span>
+        <span *ngIf="isLoading" class="loading-text">Connecting...</span>
+      </button>
+      <button type="button" class="btn-social btn-linkedin" (click)="registerWithLinkedIn()" [disabled]="isLoading">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <rect x="2" y="2" width="20" height="20" rx="5"></rect>
+        </svg>
+        <span *ngIf="!isLoading">LinkedIn</span>
+        <span *ngIf="isLoading" class="loading-text">Connecting...</span>
+      </button>
+    </div>
+
+    <!-- Card Footer -->
+    <div class="card-footer">
+      <p>No credit card required. Start free today.</p>
+    </div>
+  </div>
+</div>
