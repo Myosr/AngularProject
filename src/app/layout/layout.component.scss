@@ -1,0 +1,22 @@
+.main-content {
+    margin-left: 260px;
+    transition: margin-left .2s ease
+}
+
+.app-shell {
+    min-height: 100vh;
+    background: linear-gradient(90deg, #07142a 0%, #0f375d 50%, #08385a 100%);
+    padding: 28px 24px;
+}
+
+.content-area {
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0
+    }
+}

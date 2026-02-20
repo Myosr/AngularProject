@@ -13,14 +13,8 @@
       <!-- Email Field -->
       <div class="form-group">
         <label for="email">Email Address</label>
-        <input
-          id="email"
-          type="email"
-          formControlName="email"
-          placeholder="Enter your email"
-          class="form-input"
-          [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
-        />
+        <input id="email" type="email" formControlName="email" placeholder="Enter your email" class="form-input"
+          [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" />
         <span class="error-message" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
           <span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required</span>
           <span *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email</span>
@@ -34,20 +28,11 @@
           <a href="#!" class="forgot-password">Forgot?</a>
         </div>
         <div class="password-input-wrapper">
-          <input
-            id="password"
-            [type]="showPassword ? 'text' : 'password'"
-            formControlName="password"
-            placeholder="Enter your password"
-            class="form-input"
-            [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
-          />
-          <button
-            type="button"
-            class="toggle-password"
-            (click)="togglePasswordVisibility()"
-            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
-          >
+          <input id="password" [type]="showPassword ? 'text' : 'password'" formControlName="password"
+            placeholder="Enter your password" class="form-input"
+            [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" />
+          <button type="button" class="toggle-password" (click)="togglePasswordVisibility()"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
             <i class="icon">{{ showPassword ? '👁️' : '👁️‍🗨️' }}</i>
           </button>
         </div>
@@ -66,6 +51,11 @@
       <!-- Submit Button -->
       <button type="submit" class="btn-primary" [disabled]="!loginForm.valid">
         Sign In
+      </button>
+
+      <!-- Demo Login -->
+      <button type="button" class="btn-secondary" (click)="demoLogin()">
+        Demo Admin
       </button>
     </form>
 

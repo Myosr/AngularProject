@@ -1,0 +1,12 @@
+<aside class="sidebar" [class.collapsed]="collapsed">
+    <div class="brand">
+        <button class="toggle" (click)="toggle()">☰</button>
+        <span class="title">SalesDW</span>
+    </div>
+    <ul class="menu">
+        <li *ngFor="let item of menu" (click)="navigate(item.route)"
+            [class.active]="router.isActive(item.route||'', false)">
+            <a>{{ item.label }}</a>
+        </li>
+    </ul>
+</aside>

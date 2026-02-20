@@ -1,0 +1,38 @@
+<div class="dashboard">
+    <div class="dashboard-hero">
+        <h2>Dashboard</h2>
+        <p class="subtitle">Overview of your sales and performance</p>
+    </div>
+
+    <div class="dashboard-card">
+        <div class="cards">
+            <div class="card">Total Sales<br />
+                <div class="value">{{ summary.totalSales || 0 | currency }}</div>
+            </div>
+            <div class="card">Total Profit<br />
+                <div class="value">{{ summary.totalProfit || 0 | currency }}</div>
+            </div>
+            <div class="card">Total Orders<br />
+                <div class="value">{{ summary.totalOrders || 0 }}</div>
+            </div>
+            <div class="card">Total Customers<br />
+                <div class="value">{{ summary.totalCustomers || 0 }}</div>
+            </div>
+        </div>
+
+        <div class="charts">
+            <div class="chart">
+                <h4>Sales per month</h4>
+                <canvas id="salesMonthChart"></canvas>
+            </div>
+            <div class="chart">
+                <h4>Sales by product</h4>
+                <canvas id="salesProductChart"></canvas>
+            </div>
+            <div class="chart">
+                <h4>Sales by customer category</h4>
+                <canvas id="salesCustomerChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,5 +1,8 @@
+
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../core/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +14,7 @@ export class LoginComponent {
   showPassword = false;
   isLoading = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
@@ -25,12 +28,31 @@ export class LoginComponent {
   onSubmit(): void {
     if (this.loginForm.valid) {
       this.isLoading = true;
-      console.log('Login form value:', this.loginForm.value);
-      // Add login logic here
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 2000);
+      const { email, password } = this.loginForm.value;
+      this.auth.login(email, password).subscribe({
+        next: () => {
+          this.isLoading = false;
+          this.router.navigate(['/dashboard']);
+        },
+        error: () => { this.isLoading = false; }
+      });
     }
+  }
+
+  // Demo login for easy access to dashboard in dev/demo mode
+  demoLogin(): void {
+    const email = 'admin@example.com';
+    const password = 'demopassword';
+    // auto-fill form (visual feedback)
+    this.loginForm.patchValue({ email, password });
+    this.isLoading = true;
+    this.auth.login(email, password).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.router.navigate(['/dashboard']);
+      },
+      error: () => { this.isLoading = false; }
+    });
   }
 
   loginWithGoogle(): void {

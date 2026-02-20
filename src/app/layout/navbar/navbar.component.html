@@ -1,0 +1,7 @@
+<nav class="top-nav">
+    <div class="left">SalesDW Analytics</div>
+    <div class="right">
+        <span class="role">Role: {{ auth.getRole() }}</span>
+        <button (click)="logout()" class="btn-logout">Logout</button>
+    </div>
+</nav>
