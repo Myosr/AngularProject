@@ -1,12 +1,23 @@
 <aside class="sidebar" [class.collapsed]="collapsed">
     <div class="brand">
-        <button class="toggle" (click)="toggle()">☰</button>
-        <span class="title">SalesDW</span>
+        <button class="toggle" (click)="toggle()" [title]="collapsed ? 'Expand' : 'Collapse'">
+            {{ collapsed ? '▶' : '◀' }}
+        </button>
+        <div class="logo" *ngIf="!collapsed">
+            <span class="logo-icon">📊</span>
+            <span class="logo-text">SalesDW</span>
+        </div>
     </div>
+
+    <div class="spacer"></div>
+
     <ul class="menu">
-        <li *ngFor="let item of menu" (click)="navigate(item.route)"
-            [class.active]="router.isActive(item.route||'', false)">
-            <a>{{ item.label }}</a>
+        <li *ngFor="let item of menu"
+            (click)="navigate(item.route)"
+            [class.active]="router.isActive(item.route||'', false)"
+            [title]="collapsed ? item.label : ''">
+            <span class="icon">📍</span>
+            <span class="label" *ngIf="!collapsed">{{ item.label }}</span>
         </li>
     </ul>
 </aside>

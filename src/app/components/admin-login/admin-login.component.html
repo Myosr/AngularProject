@@ -1,0 +1,80 @@
+<div class="admin-login-container">
+  <div class="admin-login-card">
+    <div class="admin-header">
+      <div class="admin-badge">🔐 ADMIN PORTAL</div>
+      <h1>Administrator Access</h1>
+      <p>Secure login for authorized administrators only</p>
+    </div>
+
+    <form [formGroup]="adminLoginForm" (ngSubmit)="onAdminSubmit()" class="admin-login-form">
+      <!-- Error Message -->
+      <div class="error-alert" *ngIf="loginError">
+        <span class="error-icon">⚠️</span>
+        <span>{{ loginError }}</span>
+      </div>
+
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email">Admin Email</label>
+        <input id="email" type="email" formControlName="email" placeholder="Enter admin email" class="form-input"
+          [class.error]="adminLoginForm.get('email')?.invalid && adminLoginForm.get('email')?.touched" />
+        <span class="error-message" *ngIf="adminLoginForm.get('email')?.invalid && adminLoginForm.get('email')?.touched">
+          <span *ngIf="adminLoginForm.get('email')?.errors?.['required']">Email is required</span>
+          <span *ngIf="adminLoginForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+        </span>
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-input-wrapper">
+          <input id="password" [type]="showPassword ? 'text' : 'password'" formControlName="password"
+            placeholder="Enter your password" class="form-input"
+            [class.error]="adminLoginForm.get('password')?.invalid && adminLoginForm.get('password')?.touched" />
+          <button type="button" class="toggle-password" (click)="togglePasswordVisibility()"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+            <i class="icon">{{ showPassword ? '👁️' : '👁️‍🗨️' }}</i>
+          </button>
+        </div>
+        <span class="error-message" *ngIf="adminLoginForm.get('password')?.invalid && adminLoginForm.get('password')?.touched">
+          <span *ngIf="adminLoginForm.get('password')?.errors?.['required']">Password is required</span>
+          <span *ngIf="adminLoginForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters</span>
+        </span>
+      </div>
+
+      <!-- Admin Access Code -->
+      <div class="form-group">
+        <label for="adminCode">Admin Access Code</label>
+        <input id="adminCode" type="password" formControlName="adminCode" placeholder="Enter admin access code"
+          class="form-input"
+          [class.error]="adminLoginForm.get('adminCode')?.invalid && adminLoginForm.get('adminCode')?.touched" />
+        <span class="helper-text">4-digit access code required for admin portal</span>
+        <span class="error-message" *ngIf="adminLoginForm.get('adminCode')?.invalid && adminLoginForm.get('adminCode')?.touched">
+          <span *ngIf="adminLoginForm.get('adminCode')?.errors?.['required']">Access code is required</span>
+          <span *ngIf="adminLoginForm.get('adminCode')?.errors?.['minlength']">Access code must be at least 4 characters</span>
+        </span>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="admin-submit-btn" [disabled]="isLoading || adminLoginForm.invalid">
+        <span *ngIf="!isLoading">🔓 Unlock Admin Panel</span>
+        <span *ngIf="isLoading">
+          <i class="spinner">⏳</i> Authenticating...
+        </span>
+      </button>
+    </form>
+
+    <!-- Back to Login Link -->
+    <div class="back-link">
+      <button type="button" (click)="backToLogin()" class="text-button">← Back to User Login</button>
+    </div>
+
+    <!-- Demo Credentials -->
+    <div class="demo-credentials">
+      <p class="demo-title">📝 Demo Credentials:</p>
+      <p><strong>Email:</strong> admin@example.com</p>
+      <p><strong>Password:</strong> demopassword</p>
+      <p><strong>Access Code:</strong> 1234</p>
+    </div>
+  </div>
+</div>

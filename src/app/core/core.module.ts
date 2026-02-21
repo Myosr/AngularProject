@@ -2,6 +2,7 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { AuthService } from './auth.service';
+import { FirebaseService } from './firebase.service';
 import { AuthGuard } from './auth.guard';
 import { RoleGuard } from './role.guard';
 import { JwtInterceptor } from './jwt.interceptor';
@@ -10,6 +11,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 @NgModule({
     imports: [CommonModule],
     providers: [
+        FirebaseService,
         AuthService,
         AuthGuard,
         RoleGuard,

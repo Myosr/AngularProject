@@ -1,22 +1,50 @@
 .main-content {
     margin-left: 260px;
-    transition: margin-left .2s ease
-}
-
-.app-shell {
+    margin-top: 70px;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     min-height: 100vh;
-    background: linear-gradient(90deg, #07142a 0%, #0f375d 50%, #08385a 100%);
-    padding: 28px 24px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+
+    app-navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+    }
 }
 
 .content-area {
-    padding: 24px;
-    max-width: 1200px;
-    margin: 0 auto
+    padding: 28px 32px;
+    max-width: 1400px;
+    margin: 0 auto;
+    animation: slideUp 0.4s ease;
 }
 
 @media (max-width: 768px) {
     .main-content {
-        margin-left: 0
+        margin-left: 0;
+        margin-top: 60px;
+
+        app-navbar {
+            position: relative;
+            top: 0;
+            margin-bottom: 0;
+        }
+    }
+
+    .content-area {
+        padding: 16px;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

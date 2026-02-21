@@ -10,6 +10,16 @@
     </div>
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+      <!-- Error Alert -->
+      <div *ngIf="errorMessage" class="alert alert-error">
+        <span>⚠️ {{ errorMessage }}</span>
+      </div>
+
+      <!-- Success Message -->
+      <div *ngIf="successMessage" class="alert alert-success">
+        <span>✓ {{ successMessage }}</span>
+      </div>
+
       <!-- First Name Field -->
       <div class="form-row">
         <div class="form-group">

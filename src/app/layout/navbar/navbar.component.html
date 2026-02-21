@@ -1,7 +1,18 @@
 <nav class="top-nav">
-    <div class="left">SalesDW Analytics</div>
+    <div class="left">
+        <span class="brand-icon">📊</span>
+        <span class="brand-title">SalesDW</span>
+    </div>
     <div class="right">
-        <span class="role">Role: {{ auth.getRole() }}</span>
-        <button (click)="logout()" class="btn-logout">Logout</button>
+        <div class="user-profile">
+            <div class="avatar">{{ getUserName().charAt(0).toUpperCase() }}</div>
+            <div class="user-info">
+                <div class="user-name">{{ getUserName() }}</div>
+                <div class="user-role">{{ auth.getRole() === 'Admin' ? 'Administrator' : 'User' }}</div>
+            </div>
+        </div>
+        <button (click)="logout()" class="btn-logout">
+            <span>🚪</span> Logout
+        </button>
     </div>
 </nav>

@@ -10,6 +10,12 @@
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <!-- Error Message Alert -->
+      <div class="error-alert" *ngIf="errorMessage">
+        <span class="error-icon">⚠️</span>
+        <span>{{ errorMessage }}</span>
+      </div>
+
       <!-- Email Field -->
       <div class="form-group">
         <label for="email">Email Address</label>

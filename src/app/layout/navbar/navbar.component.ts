@@ -10,6 +10,11 @@ import { Router } from '@angular/router';
 export class NavbarComponent {
     constructor(public auth: AuthService, private router: Router) { }
 
+    getUserName(): string {
+        const user = this.auth.getCurrentUser();
+        return user?.displayName || 'Guest';
+    }
+
     logout() {
         this.auth.logout();
         this.router.navigate(['/login']);
