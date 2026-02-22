@@ -1,0 +1,75 @@
+<div class="dt-wrapper">
+    <div class="table-wrap">
+        <table class="data-table">
+            <!-- Header -->
+            <thead>
+                <tr>
+                    <th *ngFor="let col of columns">{{ col.label }}</th>
+                    <th *ngIf="canEdit || canDelete" class="col-actions">Actions</th>
+                </tr>
+            </thead>
+
+            <!-- Skeleton loading rows -->
+            <tbody *ngIf="loading">
+                <tr *ngFor="let _ of skeletonRows" class="skeleton-row">
+                    <td *ngFor="let col of columns">
+                        <div class="cell-skeleton"></div>
+                    </td>
+                    <td *ngIf="canEdit || canDelete">
+                        <div class="cell-skeleton btn-skeleton"></div>
+                    </td>
+                </tr>
+            </tbody>
+
+            <!-- Data rows -->
+            <tbody *ngIf="!loading && data.length > 0">
+                <tr *ngFor="let row of data">
+                    <ng-container *ngFor="let col of columns">
+
+                        <!-- Badge cell -->
+                        <td *ngIf="col.type === 'badge'">
+                            <span class="badge {{ getBadgeClass(col, getCellValue(row, col)) }}">
+                                {{ getCellValue(row, col) }}
+                            </span>
+                        </td>
+
+                        <!-- Currency cell -->
+                        <td *ngIf="col.type === 'currency'">
+                            {{ formatCurrency(getCellValue(row, col)) }}
+                        </td>
+
+                        <!-- Date cell -->
+                        <td *ngIf="col.type === 'date'">
+                            {{ formatDate(getCellValue(row, col)) }}
+                        </td>
+
+                        <!-- Default text cell -->
+                        <td *ngIf="!col.type || col.type === 'text'">
+                            {{ getCellValue(row, col) ?? '—' }}
+                        </td>
+
+                    </ng-container>
+
+                    <!-- Action buttons -->
+                    <td *ngIf="canEdit || canDelete" class="td-actions">
+                        <button *ngIf="canEdit" class="btn btn-ghost btn-icon btn-sm" title="Edit"
+                            (click)="editRow.emit(row)">
+                            <span class="material-icons-round">edit</span>
+                        </button>
+                        <button *ngIf="canDelete" class="btn btn-danger btn-icon btn-sm" title="Delete"
+                            (click)="deleteRow.emit(row)">
+                            <span class="material-icons-round">delete_outline</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="!loading && data.length === 0" class="empty-state">
+        <span class="material-icons-round empty-icon">inbox</span>
+        <p class="empty-title">{{ emptyMessage }}</p>
+    </div>
+
+</div>

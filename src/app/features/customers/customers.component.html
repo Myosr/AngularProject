@@ -1,0 +1,102 @@
+<div class="page">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div>
+            <h2 class="page-title">Customers</h2>
+            <p class="page-subtitle">Manage your customer accounts</p>
+        </div>
+        <div class="page-actions" *ngIf="isAdmin">
+            <button class="btn btn-primary" (click)="openCreate()">
+                <span class="material-icons-round">person_add</span>
+                Add Customer
+            </button>
+        </div>
+    </div>
+
+    <!-- Error alert -->
+    <div class="alert alert-error" *ngIf="errorMsg">
+        <span class="material-icons-round">error_outline</span>
+        {{ errorMsg }}
+    </div>
+
+    <!-- Data Table Card -->
+    <div class="card">
+        <app-data-table [columns]="columns" [data]="customers" [loading]="loading" [canEdit]="isAdmin"
+            [canDelete]="isAdmin" emptyMessage="No customers found. Add your first customer."
+            (editRow)="openEdit($event)" (deleteRow)="confirmDelete($event)">
+        </app-data-table>
+    </div>
+
+    <!-- ==================== FORM PANEL ==================== -->
+    <div class="form-overlay" *ngIf="formVisible">
+        <div class="form-panel" role="dialog" [attr.aria-label]="isEditing ? 'Edit Customer' : 'Add Customer'">
+
+            <!-- Panel Header -->
+            <div class="panel-header">
+                <div class="panel-title-row">
+                    <span class="material-icons-round panel-icon">{{ isEditing ? 'edit' : 'person_add' }}</span>
+                    <h3 class="panel-title">{{ isEditing ? 'Edit Customer' : 'New Customer' }}</h3>
+                </div>
+                <button class="btn btn-ghost btn-icon" (click)="closeForm()" title="Close">
+                    <span class="material-icons-round">close</span>
+                </button>
+            </div>
+
+            <!-- Form -->
+            <form [formGroup]="form" (ngSubmit)="saveCustomer()" novalidate>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cust-name">Full Name *</label>
+                        <input id="cust-name" formControlName="name" placeholder="Jane Doe" />
+                        <span class="error-msg" *ngIf="hasError('name','required')">Name is required.</span>
+                        <span class="error-msg" *ngIf="hasError('name','minlength')">At least 2 characters.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="cust-email">Email *</label>
+                        <input id="cust-email" type="email" formControlName="email" placeholder="jane@example.com" />
+                        <span class="error-msg" *ngIf="hasError('email','required')">Email is required.</span>
+                        <span class="error-msg" *ngIf="hasError('email','email')">Enter a valid email.</span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cust-phone">Phone</label>
+                        <input id="cust-phone" formControlName="phone" placeholder="+1 555 000 0000" />
+                    </div>
+                    <div class="form-group">
+                        <label for="cust-company">Company</label>
+                        <input id="cust-company" formControlName="company" placeholder="Acme Corp" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="cust-status">Status *</label>
+                    <select id="cust-status" formControlName="status">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+
+                <div class="panel-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeForm()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="submitting">
+                        <span *ngIf="!submitting">{{ isEditing ? 'Save Changes' : 'Create Customer' }}</span>
+                        <span *ngIf="submitting" class="spinner"></span>
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <!-- form overlay backdrop -->
+    <div class="form-backdrop" *ngIf="formVisible" (click)="closeForm()"></div>
+
+</div>
+
+<!-- Confirm Delete Modal -->
+<app-confirm-modal [visible]="showDeleteModal" title="Delete Customer"
+    [message]="'Are you sure you want to delete &quot;' + deletingName + '&quot;? This action cannot be undone.'"
+    confirmLabel="Delete" (confirmed)="onDeleteConfirmed()" (cancelled)="onDeleteCancelled()">
+</app-confirm-modal>

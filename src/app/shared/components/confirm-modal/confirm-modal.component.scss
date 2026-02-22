@@ -1,0 +1,114 @@
+@import 'variables';
+@import 'mixins';
+
+// --- Backdrop ---
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(3px);
+    @include flex-center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+// --- Box ---
+.modal-box {
+    background: $color-bg-white;
+    border-radius: $radius-xl;
+    padding: $sp-8;
+    max-width: 420px;
+    width: calc(100% - $sp-8);
+    box-shadow: $shadow-xl;
+    animation: slideUp 0.25s ease;
+
+    @include mobile {
+        padding: $sp-6;
+        margin: $sp-4;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+// --- Header ---
+.modal-header {
+    display: flex;
+    align-items: center;
+    gap: $sp-4;
+    margin-bottom: $sp-4;
+}
+
+.modal-icon {
+    @include flex-center;
+    width: 48px;
+    height: 48px;
+    border-radius: $radius-lg;
+    flex-shrink: 0;
+
+    .material-icons-round {
+        font-size: 26px;
+    }
+
+    &.icon-danger {
+        background: rgba($color-error, 0.12);
+        color: $color-error;
+    }
+
+    &.icon-warning {
+        background: rgba($color-warning, 0.12);
+        color: $color-warning;
+    }
+}
+
+.modal-title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0;
+}
+
+// --- Message ---
+.modal-message {
+    font-size: $font-size-base;
+    color: $color-text-secondary;
+    line-height: $line-height-relaxed;
+    margin: 0 0 $sp-6;
+}
+
+// --- Actions ---
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $sp-3;
+}
+
+// --- btn-warning (not in global layout) ---
+.btn-warning {
+    background: $color-warning;
+    color: #fff;
+    border: none;
+
+    &:hover:not(:disabled) {
+        background: darken($color-warning, 8%);
+    }
+}

@@ -1,75 +1,35 @@
-.dashboard {
-    color: #0f172a;
+@import 'variables';
+@import 'mixins';
+
+// dashboard-specific styles (global page/card/grid utilities come from _layout.scss)
+
+.dashboard {}
+
+.mt-section {
+    margin-top: $sp-6;
 }
 
-.dashboard-hero {
-    margin-bottom: 18px;
+// --- Chart area inside a card -------------------------------
+.chart-placeholder {
+    min-height: 220px;
+    position: relative;
+    @include flex-center;
+    flex-direction: column;
+    gap: $sp-3;
 }
 
-.dashboard-hero h2 {
-    margin: 0;
-    color: #0b365b;
-    font-size: 24px;
-    font-weight: 700;
+.chart-empty {
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+    text-align: center;
 }
 
-.dashboard-hero .subtitle {
-    margin: 4px 0 0 0;
-    color: #6b7280;
+// Skeleton placeholder for chart loading
+.chart-skeleton {
+    @include skeleton;
+    height: 220px;
+    width: 100%;
 }
 
-.dashboard-card {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), #fff);
-    padding: 22px;
-    border-radius: 14px;
-    box-shadow: 0 12px 30px rgba(3, 10, 28, 0.15);
-}
-
-.dashboard-card .cards {
-    display: flex;
-    gap: 18px;
-    flex-wrap: wrap;
-}
-
-.dashboard-card .card {
-    background: #fff;
-    padding: 14px 18px;
-    border-radius: 10px;
-    box-shadow: 0 6px 18px rgba(3, 10, 28, 0.06);
-    flex: 1;
-    min-width: 180px;
-    border: 1px solid rgba(15, 23, 42, 0.04);
-}
-
-.dashboard-card .card .value {
-    font-size: 20px;
-    font-weight: 800;
-    margin-top: 8px;
-    color: #0b365b;
-}
-
-.dashboard-card .charts {
-    display: flex;
-    gap: 18px;
-    margin-top: 20px;
-    flex-wrap: wrap;
-}
-
-.dashboard-card .chart {
-    background: #fff;
-    padding: 18px;
-    border-radius: 10px;
-    flex: 1;
-    min-width: 260px;
-    box-shadow: 0 6px 18px rgba(3, 10, 28, 0.05);
-}
-
-@media (max-width: 900px) {
-    .dashboard-card .cards {
-        flex-direction: column
-    }
-
-    .dashboard-card .charts {
-        flex-direction: column
-    }
-}
+// --- Stat card value formatting override --------------------
+// (formatted by the stat-card component itself)

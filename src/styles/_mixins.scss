@@ -1,0 +1,149 @@
+@import 'variables';
+
+
+// MIXINS — reusable patterns
+// ============================================================
+
+// --- Flexbox ------------------------------------------------
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@mixin flex-start {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+@mixin flex-col {
+    display: flex;
+    flex-direction: column;
+}
+
+// --- Responsive ---------------------------------------------
+@mixin mobile {
+    @media (max-width: #{$bp-md - 1}) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (min-width: #{$bp-md}) and (max-width: #{$bp-lg - 1}) {
+        @content;
+    }
+}
+
+@mixin desktop {
+    @media (min-width: #{$bp-lg}) {
+        @content;
+    }
+}
+
+@mixin max-width($bp) {
+    @media (max-width: $bp) {
+        @content;
+    }
+}
+
+// --- Transitions --------------------------------------------
+@mixin transition($props...) {
+    $list: (
+    );
+
+@each $prop in $props {
+    $list: append($list, #{$prop} $t-base, comma);
+}
+
+transition: $list;
+}
+
+@mixin transition-slow($props...) {
+    $list: (
+    );
+
+@each $prop in $props {
+    $list: append($list, #{$prop} $t-slow, comma);
+}
+
+transition: $list;
+}
+
+// --- Card ---------------------------------------------------
+@mixin card($padding: $sp-6, $radius: $radius-lg) {
+    background: $color-bg-white;
+    border-radius: $radius;
+    padding: $padding;
+    box-shadow: $shadow-md;
+    border: 1px solid $color-border;
+}
+
+// --- Button Base --------------------------------------------
+@mixin btn-reset {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: $sp-2;
+    padding: $sp-2 $sp-4;
+    border-radius: $radius-md;
+    font-family: $font-family;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    @include transition(all);
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    &:focus-visible {
+        outline: 2px solid $color-primary;
+        outline-offset: 2px;
+    }
+}
+
+// --- Skeleton Loading ---------------------------------------
+@mixin skeleton {
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s infinite linear;
+    border-radius: $radius-md;
+}
+
+// --- Text Helpers -------------------------------------------
+@mixin truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+// --- Custom Scrollbar ---------------------------------------
+@mixin scrollbar($color: rgba(0, 0, 0, 0.12)) {
+    &::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $color;
+        border-radius: $radius-full;
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.22);
+        }
+    }
+}

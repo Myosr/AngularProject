@@ -1,48 +1,50 @@
-.main-content {
-    margin-left: 260px;
-    margin-top: 70px;
-    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    min-height: 100vh;
-    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+@import 'variables';
+@import 'mixins';
 
-    app-navbar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 100;
+// ============================================================
+// LAYOUT — main + sidebar shell
+// ============================================================
+
+.main-content {
+    margin-left: $sidebar-width;
+    margin-top: $navbar-height;
+    min-height: calc(100vh - #{$navbar-height});
+    background: linear-gradient(135deg, $color-bg-light 0%, #f1f5f9 100%);
+    transition: margin-left $t-slow;
+
+    // Sidebar collapsed: main-content shifts left
+    &.sidebar-collapsed {
+        margin-left: $sidebar-collapsed-width;
+    }
+
+    // On mobile: no left margin (sidebar is overlay)
+    @include mobile {
+        margin-left: 0 !important;
+        margin-top: $navbar-height;
     }
 }
 
 .content-area {
-    padding: 28px 32px;
-    max-width: 1400px;
+    padding: $sp-8;
+    max-width: $content-max-width;
     margin: 0 auto;
-    animation: slideUp 0.4s ease;
-}
+    animation: fadeInUp 0.3s ease;
 
-@media (max-width: 768px) {
-    .main-content {
-        margin-left: 0;
-        margin-top: 60px;
-
-        app-navbar {
-            position: relative;
-            top: 0;
-            margin-bottom: 0;
-        }
+    @include tablet {
+        padding: $sp-6;
     }
 
-    .content-area {
-        padding: 16px;
+    @include mobile {
+        padding: $sp-4;
     }
 }
 
-@keyframes slideUp {
+@keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(8px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);

@@ -1,18 +1,28 @@
 <nav class="top-nav">
-    <div class="left">
-        <span class="brand-icon">📊</span>
+    <!-- Mobile hamburger -->
+    <button class="hamburger" (click)="menuClick.emit()" aria-label="Open menu">
+        <span class="material-icons-round">menu</span>
+    </button>
+
+    <!-- Brand (visible on mobile only when sidebar is hidden) -->
+    <div class="nav-brand">
+        <span class="material-icons-round brand-icon">bar_chart</span>
         <span class="brand-title">SalesDW</span>
     </div>
-    <div class="right">
-        <div class="user-profile">
-            <div class="avatar">{{ getUserName().charAt(0).toUpperCase() }}</div>
+
+    <!-- Right side -->
+    <div class="nav-right">
+        <div class="user-chip">
+            <div class="avatar">{{ getInitial() }}</div>
             <div class="user-info">
                 <div class="user-name">{{ getUserName() }}</div>
                 <div class="user-role">{{ auth.getRole() === 'Admin' ? 'Administrator' : 'User' }}</div>
             </div>
         </div>
-        <button (click)="logout()" class="btn-logout">
-            <span>🚪</span> Logout
+
+        <button class="btn-logout" (click)="logout()" title="Logout">
+            <span class="material-icons-round">logout</span>
+            <span class="logout-label">Logout</span>
         </button>
     </div>
 </nav>

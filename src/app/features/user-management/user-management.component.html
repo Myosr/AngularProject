@@ -1,0 +1,87 @@
+<div class="page">
+
+    <div class="page-header">
+        <div>
+            <h2 class="page-title">User Management</h2>
+            <p class="page-subtitle">Manage system users and roles</p>
+        </div>
+        <div class="page-actions">
+            <button class="btn btn-primary" (click)="openCreate()">
+                <span class="material-icons-round">person_add</span>
+                Add User
+            </button>
+        </div>
+    </div>
+
+    <div class="alert alert-error" *ngIf="errorMsg">
+        <span class="material-icons-round">error_outline</span> {{ errorMsg }}
+    </div>
+
+    <div class="card">
+        <app-data-table [columns]="columns" [data]="users" [loading]="loading" [canEdit]="true" [canDelete]="true"
+            emptyMessage="No users found." (editRow)="openEdit($event)" (deleteRow)="confirmDelete($event)">
+        </app-data-table>
+    </div>
+
+    <!-- Form Panel -->
+    <div class="form-backdrop" *ngIf="formVisible" (click)="closeForm()"></div>
+    <div class="form-overlay" *ngIf="formVisible">
+        <div class="form-panel">
+            <div class="panel-header">
+                <div class="panel-title-row">
+                    <span class="material-icons-round panel-icon">manage_accounts</span>
+                    <h3 class="panel-title">{{ isEditing ? 'Edit User' : 'New User' }}</h3>
+                </div>
+                <button class="btn btn-ghost btn-icon" (click)="closeForm()">
+                    <span class="material-icons-round">close</span>
+                </button>
+            </div>
+
+            <form [formGroup]="form" (ngSubmit)="saveUser()" novalidate>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Display Name *</label>
+                        <input formControlName="displayName" placeholder="Jane Doe" />
+                        <span class="error-msg" *ngIf="hasError('displayName','required')">Name is required.</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" formControlName="email" placeholder="jane@example.com" />
+                        <span class="error-msg" *ngIf="hasError('email','required')">Email is required.</span>
+                        <span class="error-msg" *ngIf="hasError('email','email')">Invalid email.</span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Role *</label>
+                        <select formControlName="role">
+                            <option value="Admin">Admin</option>
+                            <option value="User">User</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Password {{ isEditing ? '(leave blank to keep)' : '*' }}</label>
+                        <input type="password" formControlName="password" placeholder="Min 8 characters" />
+                        <span class="error-msg" *ngIf="hasError('password','required')">Password is required.</span>
+                        <span class="error-msg" *ngIf="hasError('password','minlength')">At least 8 characters.</span>
+                    </div>
+                </div>
+
+                <div class="panel-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeForm()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="submitting">
+                        <span *ngIf="!submitting">{{ isEditing ? 'Save Changes' : 'Create User' }}</span>
+                        <span *ngIf="submitting" class="spinner"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<app-confirm-modal [visible]="showDeleteModal" title="Delete User"
+    [message]="'Delete user &quot;' + deletingName + '&quot;? This action cannot be undone.'" confirmLabel="Delete"
+    (confirmed)="onDeleteConfirmed()" (cancelled)="onDeleteCancelled()">
+</app-confirm-modal>

@@ -1,0 +1,369 @@
+@import 'variables';
+@import 'mixins';
+
+// ============================================================
+// GLOBAL LAYOUT UTILITIES & SHARED STYLES
+// ============================================================
+
+// --- Keyframes ----------------------------------------------
+@keyframes shimmer {
+    0% {
+        background-position: 200% center;
+    }
+
+    100% {
+        background-position: -200% center;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+// --- Page Container -----------------------------------------
+.page {
+    padding: $sp-8;
+    animation: fadeInUp 0.3s ease;
+
+    @include mobile {
+        padding: $sp-4;
+    }
+}
+
+.page-header {
+    @include flex-between;
+    margin-bottom: $sp-6;
+    gap: $sp-4;
+    flex-wrap: wrap;
+
+    .page-title {
+        font-size: $font-size-2xl;
+        font-weight: $font-weight-bold;
+        color: $color-text-primary;
+        margin: 0;
+    }
+
+    .page-subtitle {
+        font-size: $font-size-sm;
+        color: $color-text-secondary;
+        margin: $sp-1 0 0;
+    }
+
+    .page-actions {
+        @include flex-start;
+        gap: $sp-2;
+        flex-wrap: wrap;
+    }
+}
+
+// --- Stats Grid (responsive) --------------------------------
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: $sp-5;
+    margin-bottom: $sp-6;
+
+    @include tablet {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include mobile {
+        grid-template-columns: 1fr;
+    }
+}
+
+// --- Charts Grid (responsive) -------------------------------
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $sp-5;
+
+    @include tablet {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include mobile {
+        grid-template-columns: 1fr;
+    }
+}
+
+.chart-card-2col {
+    grid-column: span 2;
+
+    @include tablet {
+        grid-column: span 1;
+    }
+
+    @include mobile {
+        grid-column: span 1;
+    }
+}
+
+// --- Card ---------------------------------------------------
+.card {
+    @include card;
+}
+
+.card-header {
+    @include flex-between;
+    margin-bottom: $sp-4;
+
+    .card-title {
+        font-size: $font-size-md;
+        font-weight: $font-weight-semibold;
+        color: $color-text-primary;
+        margin: 0;
+    }
+}
+
+// --- Badge --------------------------------------------------
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px $sp-2;
+    border-radius: $radius-full;
+    font-size: 10px;
+    font-weight: $font-weight-semibold;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+
+    &-success {
+        background: rgba($color-success, 0.12);
+        color: darken($color-success, 5%);
+    }
+
+    &-error {
+        background: rgba($color-error, 0.12);
+        color: darken($color-error, 5%);
+    }
+
+    &-warning {
+        background: rgba($color-warning, 0.12);
+        color: darken($color-warning, 10%);
+    }
+
+    &-info {
+        background: rgba($color-info, 0.12);
+        color: darken($color-info, 5%);
+    }
+
+    &-neutral {
+        background: rgba($color-text-secondary, 0.10);
+        color: $color-text-secondary;
+    }
+}
+
+// --- Buttons ------------------------------------------------
+.btn {
+    @include btn-reset;
+
+    &-primary {
+        background: $color-primary;
+        color: #fff;
+
+        &:hover:not(:disabled) {
+            background: $color-primary-dark;
+            box-shadow: $shadow-sm;
+        }
+    }
+
+    &-secondary {
+        background: $color-bg-white;
+        color: $color-text-primary;
+        border: 1px solid $color-border;
+
+        &:hover:not(:disabled) {
+            background: $color-bg-light;
+        }
+    }
+
+    &-danger {
+        background: #fef2f2;
+        color: $color-error;
+        border: 1px solid rgba($color-error, 0.2);
+
+        &:hover:not(:disabled) {
+            background: $color-error;
+            color: #fff;
+        }
+    }
+
+    &-ghost {
+        background: transparent;
+        color: $color-text-secondary;
+
+        &:hover:not(:disabled) {
+            background: $color-bg-light;
+            color: $color-text-primary;
+        }
+    }
+
+    &-icon {
+        padding: $sp-2;
+        min-width: 34px;
+        min-height: 34px;
+        border-radius: $radius-md;
+    }
+
+    &-sm {
+        padding: $sp-1 $sp-3;
+        font-size: $font-size-xs;
+    }
+
+    &-lg {
+        padding: $sp-3 $sp-6;
+        font-size: $font-size-base;
+    }
+}
+
+// --- Form ---------------------------------------------------
+.form-group {
+    @include flex-col;
+    gap: $sp-1;
+    margin-bottom: $sp-4;
+
+    label {
+        font-size: $font-size-sm;
+        font-weight: $font-weight-medium;
+        color: $color-text-primary;
+    }
+
+    input,
+    select,
+    textarea {
+        padding: $sp-2 $sp-3;
+        border: 1.5px solid $color-border;
+        border-radius: $radius-md;
+        font-family: $font-family;
+        font-size: $font-size-sm;
+        color: $color-text-primary;
+        background: $color-bg-white;
+        @include transition(border-color, box-shadow);
+        width: 100%;
+
+        &::placeholder {
+            color: $color-text-muted;
+        }
+
+        &:focus {
+            outline: none;
+            border-color: $color-primary;
+            box-shadow: 0 0 0 3px rgba($color-primary, 0.12);
+        }
+
+        &.ng-invalid.ng-touched {
+            border-color: $color-error;
+            box-shadow: 0 0 0 3px rgba($color-error, 0.10);
+        }
+    }
+
+    .error-msg {
+        font-size: 11px;
+        color: $color-error;
+        margin-top: 2px;
+    }
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $sp-4;
+
+    @include mobile {
+        grid-template-columns: 1fr;
+    }
+}
+
+// --- Table --------------------------------------------------
+.table-wrap {
+    overflow-x: auto;
+    @include scrollbar;
+    border-radius: $radius-lg;
+    border: 1px solid $color-border;
+}
+
+table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: $font-size-sm;
+    min-width: 600px;
+
+    thead tr {
+        background: #f8fafc;
+        border-bottom: 1.5px solid $color-border;
+
+        th {
+            padding: $sp-3 $sp-4;
+            text-align: left;
+            font-weight: $font-weight-semibold;
+            color: $color-text-secondary;
+            white-space: nowrap;
+            font-size: $font-size-xs;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+    }
+
+    tbody tr {
+        border-bottom: 1px solid $color-border-light;
+        @include transition(background);
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        &:hover {
+            background: #f8fafc;
+        }
+
+        td {
+            padding: $sp-3 $sp-4;
+            color: $color-text-primary;
+            vertical-align: middle;
+        }
+    }
+}
+
+// --- Empty State --------------------------------------------
+.empty-state {
+    @include flex-col;
+    align-items: center;
+    justify-content: center;
+    padding: $sp-12;
+    color: $color-text-muted;
+    gap: $sp-3;
+
+    .empty-icon {
+        font-size: 48px;
+        opacity: 0.4;
+    }
+
+    .empty-title {
+        font-size: $font-size-md;
+        font-weight: $font-weight-medium;
+        color: $color-text-secondary;
+    }
+
+    .empty-desc {
+        font-size: $font-size-sm;
+        text-align: center;
+    }
+}

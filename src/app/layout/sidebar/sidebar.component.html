@@ -1,23 +1,52 @@
-<aside class="sidebar" [class.collapsed]="collapsed">
-    <div class="brand">
-        <button class="toggle" (click)="toggle()" [title]="collapsed ? 'Expand' : 'Collapse'">
-            {{ collapsed ? '▶' : '◀' }}
+<!-- Mobile backdrop -->
+<div class="sidebar-backdrop" *ngIf="mobileOpen" (click)="onBackdropClick()"></div>
+
+<aside class="sidebar" [class.collapsed]="collapsed" [class.mobile-open]="mobileOpen" role="navigation"
+    aria-label="Main navigation">
+
+    <!-- Brand / Toggle row -->
+    <div class="sidebar-brand">
+        <button class="toggle-btn" (click)="onToggle()"
+            [attr.aria-label]="collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+            [title]="collapsed ? 'Expand' : 'Collapse'">
+            <span class="material-icons-round">
+                {{ collapsed ? 'menu' : 'menu_open' }}
+            </span>
         </button>
-        <div class="logo" *ngIf="!collapsed">
-            <span class="logo-icon">📊</span>
-            <span class="logo-text">SalesDW</span>
+
+        <div class="brand-logo" *ngIf="!collapsed">
+            <span class="material-icons-round brand-icon">bar_chart</span>
+            <span class="brand-text">SalesDW</span>
         </div>
     </div>
 
-    <div class="spacer"></div>
+    <!-- Role badge -->
+    <div class="role-badge" *ngIf="!collapsed">
+        <span class="material-icons-round role-icon">
+            {{ auth.isAdmin() ? 'admin_panel_settings' : 'person' }}
+        </span>
+        <span class="role-label">{{ auth.isAdmin() ? 'Administrator' : 'User' }}</span>
+    </div>
 
-    <ul class="menu">
-        <li *ngFor="let item of menu"
-            (click)="navigate(item.route)"
-            [class.active]="router.isActive(item.route||'', false)"
-            [title]="collapsed ? item.label : ''">
-            <span class="icon">📍</span>
-            <span class="label" *ngIf="!collapsed">{{ item.label }}</span>
-        </li>
-    </ul>
+    <!-- Navigation menu -->
+    <nav class="nav-menu">
+        <ul>
+            <li *ngFor="let item of menu">
+                <a class="nav-item" [routerLink]="item.route" [class.active]="isActive(item.route)"
+                    [title]="collapsed ? item.label : ''" (click)="mobileOpen && onBackdropClick()">
+                    <span class="nav-icon material-icons-round">{{ item.icon }}</span>
+                    <span class="nav-label" *ngIf="!collapsed">{{ item.label }}</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Logout at bottom -->
+    <div class="sidebar-footer">
+        <button class="nav-item logout-btn" (click)="auth.logout().subscribe()">
+            <span class="nav-icon material-icons-round">logout</span>
+            <span class="nav-label" *ngIf="!collapsed">Logout</span>
+        </button>
+    </div>
+
 </aside>

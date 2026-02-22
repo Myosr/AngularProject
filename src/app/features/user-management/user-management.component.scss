@@ -1,0 +1,97 @@
+@import 'variables';
+@import 'mixins';
+
+.form-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(2px);
+    z-index: 200;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.form-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 560px;
+    z-index: 201;
+    animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    @include mobile {
+        max-width: 100%;
+    }
+}
+
+.form-panel {
+    background: $color-bg-white;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: $shadow-xl;
+
+    form {
+        flex: 1;
+        overflow-y: auto;
+        padding: $sp-6;
+        @include scrollbar;
+    }
+}
+
+.panel-header {
+    @include flex-between;
+    padding: $sp-5 $sp-6;
+    border-bottom: 1px solid $color-border;
+    flex-shrink: 0;
+}
+
+.panel-title-row {
+    @include flex-start;
+    gap: $sp-3;
+}
+
+.panel-icon {
+    font-size: 22px;
+    color: $color-primary;
+}
+
+.panel-title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0;
+}
+
+.panel-footer {
+    @include flex-between;
+    padding: $sp-4 $sp-6;
+    border-top: 1px solid $color-border;
+    background: $color-bg-light;
+    flex-shrink: 0;
+    justify-content: flex-end;
+    gap: $sp-3;
+}

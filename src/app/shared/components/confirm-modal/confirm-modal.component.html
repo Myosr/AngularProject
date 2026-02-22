@@ -1,0 +1,21 @@
+<div class="modal-backdrop" *ngIf="visible" (click)="onCancel()" role="dialog" aria-modal="true">
+    <div class="modal-box" [class]="'modal-' + type" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <div class="modal-icon" [class]="'icon-' + type">
+                <span class="material-icons-round">
+                    {{ type === 'danger' ? 'delete_forever' : 'warning_amber' }}
+                </span>
+            </div>
+            <h3 class="modal-title">{{ title }}</h3>
+        </div>
+
+        <p class="modal-message">{{ message }}</p>
+
+        <div class="modal-actions">
+            <button class="btn btn-secondary" (click)="onCancel()">{{ cancelLabel }}</button>
+            <button class="btn" [class]="type === 'danger' ? 'btn-danger' : 'btn-warning'" (click)="onConfirm()">
+                {{ confirmLabel }}
+            </button>
+        </div>
+    </div>
+</div>

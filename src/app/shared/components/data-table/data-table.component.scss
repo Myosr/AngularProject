@@ -1,0 +1,65 @@
+@import 'variables';
+@import 'mixins';
+
+.dt-wrapper {
+    width: 100%;
+}
+
+// --- Cell skeleton ---
+.skeleton-row td {
+    padding: $sp-3 $sp-4;
+}
+
+.cell-skeleton {
+    @include skeleton;
+    height: 14px;
+    border-radius: $radius-sm;
+    width: 70%;
+
+    &.btn-skeleton {
+        width: 60px;
+        height: 28px;
+        border-radius: $radius-md;
+    }
+}
+
+// --- Action column ---
+.col-actions,
+.td-actions {
+    text-align: right;
+    white-space: nowrap;
+    width: 1%;
+}
+
+.td-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: $sp-1;
+}
+
+// --- Button overrides ---
+.btn-ghost.btn-icon {
+    color: $color-text-secondary;
+
+    .material-icons-round {
+        font-size: 18px;
+    }
+
+    &:hover {
+        background: rgba($color-info, 0.1);
+        color: $color-info;
+    }
+}
+
+.btn-danger.btn-icon {
+    .material-icons-round {
+        font-size: 18px;
+    }
+}
+
+// --- Empty state icon ---
+.empty-state .empty-icon {
+    font-size: 40px;
+    color: $color-text-muted;
+}

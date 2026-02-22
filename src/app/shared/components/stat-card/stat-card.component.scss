@@ -1,0 +1,132 @@
+@import 'variables';
+@import 'mixins';
+
+.stat-card {
+    background: $color-bg-white;
+    border-radius: $radius-xl;
+    padding: $sp-5 $sp-6;
+    box-shadow: $shadow-md;
+    border: 1px solid $color-border;
+    display: flex;
+    align-items: flex-start;
+    gap: $sp-4;
+    @include transition-slow(transform, box-shadow);
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: $radius-xl;
+        opacity: 0;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.06) 100%);
+        @include transition(opacity);
+    }
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: $shadow-lg;
+
+        &::after {
+            opacity: 1;
+        }
+    }
+
+    // --- Skeleton state ---
+    &.loading {
+        pointer-events: none;
+    }
+}
+
+// --- Icon ---
+.stat-icon {
+    @include flex-center;
+    width: 48px;
+    height: 48px;
+    border-radius: $radius-lg;
+    flex-shrink: 0;
+
+    .material-icons-round {
+        font-size: 24px;
+    }
+}
+
+// --- Body ---
+.stat-body {
+    @include flex-col;
+    flex: 1;
+    min-width: 0;
+}
+
+.stat-title {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-secondary;
+    margin: 0 0 $sp-1;
+    @include truncate;
+}
+
+.stat-value {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    margin: 0 0 $sp-2;
+    letter-spacing: -0.5px;
+}
+
+// --- Trend indicator ---
+.stat-trend {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    border-radius: $radius-full;
+    padding: 2px $sp-2;
+
+    .trend-icon {
+        font-size: 14px;
+    }
+
+    &.up {
+        color: $color-success;
+        background: rgba($color-success, 0.1);
+    }
+
+    &.down {
+        color: $color-error;
+        background: rgba($color-error, 0.1);
+    }
+}
+
+// --- Skeleton pieces ---
+.skeleton-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: $radius-lg;
+    flex-shrink: 0;
+    @include skeleton;
+}
+
+.skeleton-body {
+    flex: 1;
+    @include flex-col;
+    gap: $sp-2;
+    padding-top: $sp-1;
+}
+
+.skeleton-line {
+    @include skeleton;
+    height: 12px;
+    border-radius: $radius-sm;
+
+    &.short {
+        width: 60%;
+    }
+
+    &.tall {
+        height: 24px;
+        width: 80%;
+    }
+}

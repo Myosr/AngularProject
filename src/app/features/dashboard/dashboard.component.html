@@ -1,38 +1,71 @@
-<div class="dashboard">
-    <div class="dashboard-hero">
-        <h2>Dashboard</h2>
-        <p class="subtitle">Overview of your sales and performance</p>
+<div class="page dashboard">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div>
+            <h2 class="page-title">Dashboard</h2>
+            <p class="page-subtitle">Overview of sales performance and analytics</p>
+        </div>
+        <button class="btn btn-primary" (click)="loadData()">
+            <span class="material-icons-round">refresh</span>
+            Refresh
+        </button>
     </div>
 
-    <div class="dashboard-card">
-        <div class="cards">
-            <div class="card">Total Sales<br />
-                <div class="value">{{ summary.totalSales || 0 | currency }}</div>
-            </div>
-            <div class="card">Total Profit<br />
-                <div class="value">{{ summary.totalProfit || 0 | currency }}</div>
-            </div>
-            <div class="card">Total Orders<br />
-                <div class="value">{{ summary.totalOrders || 0 }}</div>
-            </div>
-            <div class="card">Total Customers<br />
-                <div class="value">{{ summary.totalCustomers || 0 }}</div>
-            </div>
-        </div>
+    <!-- Stats Row -->
+    <div class="stats-grid">
+        <app-stat-card *ngFor="let stat of stats" [title]="stat.title" [value]="stat.value" [icon]="stat.icon"
+            [color]="stat.color" [trend]="stat.trend" [trendValue]="stat.trendValue" [loading]="loading">
+        </app-stat-card>
+    </div>
 
-        <div class="charts">
-            <div class="chart">
-                <h4>Sales per month</h4>
+    <!-- Charts -->
+    <div class="charts-grid">
+        <!-- Sales per Month -->
+        <div class="card chart-card-2col">
+            <div class="card-header">
+                <h4 class="card-title">Sales per Month</h4>
+            </div>
+            <div class="chart-placeholder" *ngIf="!loading">
                 <canvas id="salesMonthChart"></canvas>
+                <p class="chart-empty" *ngIf="salesByMonth.length === 0">No data available</p>
             </div>
-            <div class="chart">
-                <h4>Sales by product</h4>
+            <div class="chart-skeleton" *ngIf="loading"></div>
+        </div>
+
+        <!-- Sales by Product -->
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Sales by Product</h4>
+            </div>
+            <div class="chart-placeholder" *ngIf="!loading">
                 <canvas id="salesProductChart"></canvas>
+                <p class="chart-empty" *ngIf="salesByProduct.length === 0">No data available</p>
             </div>
-            <div class="chart">
-                <h4>Sales by customer category</h4>
+            <div class="chart-skeleton" *ngIf="loading"></div>
+        </div>
+
+        <!-- Sales by Customer Category -->
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Sales by Customer Category</h4>
+            </div>
+            <div class="chart-placeholder" *ngIf="!loading">
                 <canvas id="salesCustomerChart"></canvas>
+                <p class="chart-empty" *ngIf="salesByCustomer.length === 0">No data available</p>
             </div>
+            <div class="chart-skeleton" *ngIf="loading"></div>
         </div>
     </div>
+
+    <!-- Recent Activity Table -->
+    <div class="card mt-section">
+        <div class="card-header">
+            <h4 class="card-title">Recent Activity</h4>
+        </div>
+        <app-data-table [columns]="recentActivityCols" [data]="recentActivity" [loading]="loading"
+            emptyMessage="No recent activity to display.">
+        </app-data-table>
+    </div>
+
 </div>

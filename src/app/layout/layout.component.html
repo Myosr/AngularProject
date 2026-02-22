@@ -1,7 +1,9 @@
-<app-sidebar></app-sidebar>
+<app-sidebar [collapsed]="isCollapsed" [mobileOpen]="isMobileOpen" (toggled)="onSidebarToggled()"
+    (closed)="onSidebarClosed()">
+</app-sidebar>
 
-<div class="main-content">
-    <app-navbar></app-navbar>
+<div class="main-content" [class.sidebar-collapsed]="isCollapsed">
+    <app-navbar (menuClick)="openMobileSidebar()"></app-navbar>
     <div class="content-area">
         <router-outlet></router-outlet>
     </div>

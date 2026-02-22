@@ -1,0 +1,97 @@
+<div class="page">
+
+    <!-- Header -->
+    <div class="page-header">
+        <div>
+            <h2 class="page-title">Products</h2>
+            <p class="page-subtitle">Manage your product catalog</p>
+        </div>
+        <div class="page-actions" *ngIf="isAdmin">
+            <button class="btn btn-primary" (click)="openCreate()">
+                <span class="material-icons-round">add_box</span>
+                Add Product
+            </button>
+        </div>
+    </div>
+
+    <div class="alert alert-error" *ngIf="errorMsg">
+        <span class="material-icons-round">error_outline</span> {{ errorMsg }}
+    </div>
+
+    <div class="card">
+        <app-data-table [columns]="columns" [data]="products" [loading]="loading" [canEdit]="isAdmin"
+            [canDelete]="isAdmin" emptyMessage="No products found. Add your first product." (editRow)="openEdit($event)"
+            (deleteRow)="confirmDelete($event)">
+        </app-data-table>
+    </div>
+
+    <!-- Form Panel -->
+    <div class="form-backdrop" *ngIf="formVisible" (click)="closeForm()"></div>
+    <div class="form-overlay" *ngIf="formVisible">
+        <div class="form-panel">
+
+            <div class="panel-header">
+                <div class="panel-title-row">
+                    <span class="material-icons-round panel-icon">{{ isEditing ? 'edit' : 'add_box' }}</span>
+                    <h3 class="panel-title">{{ isEditing ? 'Edit Product' : 'New Product' }}</h3>
+                </div>
+                <button class="btn btn-ghost btn-icon" (click)="closeForm()">
+                    <span class="material-icons-round">close</span>
+                </button>
+            </div>
+
+            <form [formGroup]="form" (ngSubmit)="saveProduct()" novalidate>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Name *</label>
+                        <input formControlName="name" placeholder="Product name" />
+                        <span class="error-msg" *ngIf="hasError('name','required')">Name is required.</span>
+                    </div>
+                    <div class="form-group">
+                        <label>SKU</label>
+                        <input formControlName="sku" placeholder="e.g. PRD-001" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Category</label>
+                    <input formControlName="category" placeholder="e.g. Electronics" />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Price *</label>
+                        <input type="number" formControlName="price" min="0" step="0.01" />
+                        <span class="error-msg" *ngIf="hasError('price','min')">Price must be ≥ 0.</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Stock *</label>
+                        <input type="number" formControlName="stock" min="0" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Status *</label>
+                    <select formControlName="status">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+
+                <div class="panel-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeForm()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="submitting">
+                        <span *ngIf="!submitting">{{ isEditing ? 'Save Changes' : 'Create Product' }}</span>
+                        <span *ngIf="submitting" class="spinner"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<app-confirm-modal [visible]="showDeleteModal" title="Delete Product"
+    [message]="'Delete &quot;' + deletingName + '&quot;? This cannot be undone.'" confirmLabel="Delete"
+    (confirmed)="onDeleteConfirmed()" (cancelled)="onDeleteCancelled()">
+</app-confirm-modal>
