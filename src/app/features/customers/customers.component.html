@@ -62,12 +62,24 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="cust-phone">Phone</label>
-                        <input id="cust-phone" formControlName="phone" placeholder="+1 555 000 0000" />
+                        <label for="cust-phone">Phone *</label>
+                        <input id="cust-phone" formControlName="phone" placeholder="+216 55 556 055" />
+                        <span class="error-msg" *ngIf="hasError('phone','required')">Phone is required.</span>
                     </div>
                     <div class="form-group">
-                        <label for="cust-company">Company</label>
-                        <input id="cust-company" formControlName="company" placeholder="Acme Corp" />
+                        <label for="cust-company">Customer Category *</label>
+                        <select id="cust-company" formControlName="company">
+                            <option value="">-- Select Category --</option>
+                            <option value="Agent">Agent</option>
+                            <option value="Wholesaler">Wholesaler</option>
+                            <option value="Novelty Shop">Novelty Shop</option>
+                            <option value="Supermarket">Supermarket</option>
+                            <option value="Computer Store">Computer Store</option>
+                            <option value="Gift Store">Gift Store</option>
+                            <option value="Corporate">Corporate</option>
+                            <option value="General Retailer">General Retailer</option>
+                        </select>
+                        <span class="error-msg" *ngIf="hasError('company','required')">Category is required.</span>
                     </div>
                 </div>
 
@@ -77,6 +89,38 @@
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                     </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cust-address">Delivery Address *</label>
+                        <input id="cust-address" formControlName="deliveryAddress" placeholder="123 Main St" />
+                        <span class="error-msg" *ngIf="hasError('deliveryAddress','required')">Delivery address is
+                            required.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="cust-city">City *</label>
+                        <input id="cust-city" formControlName="city" placeholder="City" />
+                        <span class="error-msg" *ngIf="hasError('city','required')">City is required.</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cust-country">Country *</label>
+                        <input id="cust-country" formControlName="country" placeholder="Country" />
+                        <span class="error-msg" *ngIf="hasError('country','required')">Country is required.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="cust-postal">Postal Code *</label>
+                        <input id="cust-postal" formControlName="postalCode" placeholder="Postal Code" />
+                        <span class="error-msg" *ngIf="hasError('postalCode','required')">Postal code is
+                            required.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="cust-paymentDays">Payment Days *</label>
+                    <input id="cust-paymentDays" type="number" formControlName="paymentDays" min="1" />
+                    <span class="error-msg" *ngIf="hasError('paymentDays','required')">Payment days is required.</span>
                 </div>
 
                 <div class="panel-footer">

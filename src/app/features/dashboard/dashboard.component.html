@@ -26,10 +26,11 @@
             <div class="card-header">
                 <h4 class="card-title">Sales per Month</h4>
             </div>
-            <div class="chart-placeholder" *ngIf="!loading">
-                <canvas id="salesMonthChart"></canvas>
-                <p class="chart-empty" *ngIf="salesByMonth.length === 0">No data available</p>
+            <div class="chart-container" *ngIf="!loading && salesByMonth.length > 0">
+                <canvas baseChart [type]="'bar'" [data]="salesMonthData" [options]="salesMonthOptions">
+                </canvas>
             </div>
+            <p class="chart-empty" *ngIf="!loading && salesByMonth.length === 0">No data available</p>
             <div class="chart-skeleton" *ngIf="loading"></div>
         </div>
 
@@ -38,10 +39,11 @@
             <div class="card-header">
                 <h4 class="card-title">Sales by Product</h4>
             </div>
-            <div class="chart-placeholder" *ngIf="!loading">
-                <canvas id="salesProductChart"></canvas>
-                <p class="chart-empty" *ngIf="salesByProduct.length === 0">No data available</p>
+            <div class="chart-container" *ngIf="!loading && salesByProduct.length > 0">
+                <canvas baseChart [type]="'doughnut'" [data]="salesProductData" [options]="salesProductOptions">
+                </canvas>
             </div>
+            <p class="chart-empty" *ngIf="!loading && salesByProduct.length === 0">No data available</p>
             <div class="chart-skeleton" *ngIf="loading"></div>
         </div>
 
@@ -50,10 +52,11 @@
             <div class="card-header">
                 <h4 class="card-title">Sales by Customer Category</h4>
             </div>
-            <div class="chart-placeholder" *ngIf="!loading">
-                <canvas id="salesCustomerChart"></canvas>
-                <p class="chart-empty" *ngIf="salesByCustomer.length === 0">No data available</p>
+            <div class="chart-container" *ngIf="!loading && salesByCustomer.length > 0">
+                <canvas baseChart [type]="'doughnut'" [data]="salesCustomerData" [options]="salesCustomerOptions">
+                </canvas>
             </div>
+            <p class="chart-empty" *ngIf="!loading && salesByCustomer.length === 0">No data available</p>
             <div class="chart-skeleton" *ngIf="loading"></div>
         </div>
     </div>

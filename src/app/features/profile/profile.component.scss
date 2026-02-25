@@ -1,0 +1,261 @@
+@import 'variables';
+@import 'mixins';
+
+.profile-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: $sp-6;
+    align-items: start;
+
+    @include tablet {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ---------- Left card ---------- */
+.profile-card {
+    background: $color-bg-white;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    padding: $sp-8 $sp-6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: $shadow-sm;
+}
+
+.avatar {
+    width: 88px;
+    height: 88px;
+    border-radius: $radius-full;
+    background: linear-gradient(135deg, $color-primary, $color-primary-dark);
+    color: $color-text-white;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: $sp-4;
+    letter-spacing: 1px;
+}
+
+.profile-name {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0 0 $sp-2;
+}
+
+.profile-role {
+    margin-bottom: $sp-3;
+}
+
+.profile-email {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin: 0 0 $sp-4;
+    word-break: break-all;
+}
+
+.profile-meta {
+    display: flex;
+    align-items: center;
+    gap: $sp-1;
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+
+    .material-icons-round {
+        font-size: 14px;
+    }
+}
+
+/* ---------- Right forms ---------- */
+.profile-forms {
+    display: flex;
+    flex-direction: column;
+    gap: $sp-6;
+}
+
+.card {
+    background: $color-bg-white;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    padding: $sp-6;
+    box-shadow: $shadow-sm;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: $sp-3;
+    margin-bottom: $sp-5;
+    padding-bottom: $sp-4;
+    border-bottom: 1px solid $color-border-light;
+}
+
+.card-icon {
+    font-size: 22px;
+    color: $color-primary;
+}
+
+.card-title {
+    font-size: $font-size-md;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0;
+}
+
+/* ---------- Forms ---------- */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $sp-4;
+
+    @include mobile {
+        grid-template-columns: 1fr;
+    }
+}
+
+.form-group {
+    margin-bottom: $sp-4;
+
+    label {
+        display: block;
+        font-size: $font-size-sm;
+        font-weight: $font-weight-medium;
+        color: $color-text-secondary;
+        margin-bottom: $sp-1;
+    }
+
+    input,
+    select {
+        width: 100%;
+        padding: $sp-2 $sp-3;
+        font-size: $font-size-base;
+        border: 1px solid $color-border;
+        border-radius: $radius-md;
+        background: $color-bg-white;
+        color: $color-text-primary;
+        transition: border-color $t-fast;
+        outline: none;
+        box-sizing: border-box;
+
+        &:focus {
+            border-color: $color-primary;
+            box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+        }
+
+        &:disabled {
+            background: $color-bg-light;
+            color: $color-text-muted;
+            cursor: not-allowed;
+        }
+    }
+}
+
+.error-msg {
+    display: block;
+    font-size: $font-size-xs;
+    color: $color-error;
+    margin-top: $sp-1;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: $sp-3;
+}
+
+/* ---------- Alerts ---------- */
+.alert {
+    display: flex;
+    align-items: center;
+    gap: $sp-2;
+    padding: $sp-3 $sp-4;
+    border-radius: $radius-md;
+    font-size: $font-size-sm;
+    margin-bottom: $sp-4;
+
+    .material-icons-round {
+        font-size: 18px;
+    }
+}
+
+.alert-success {
+    background: rgba($color-success, 0.08);
+    color: darken($color-success, 10%);
+    border: 1px solid rgba($color-success, 0.2);
+}
+
+.alert-error {
+    background: rgba($color-error, 0.08);
+    color: darken($color-error, 10%);
+    border: 1px solid rgba($color-error, 0.2);
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: $sp-2;
+    padding: $sp-2 $sp-5;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    border-radius: $radius-md;
+    border: none;
+    cursor: pointer;
+    transition: all $t-fast;
+}
+
+.btn-primary {
+    background: $color-primary;
+    color: $color-text-white;
+
+    &:hover:not(:disabled) {
+        background: $color-primary-dark;
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
+.btn-icon {
+    font-size: 18px;
+}
+
+.spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ---------- Badges ---------- */
+.badge {
+    display: inline-block;
+    padding: 2px $sp-3;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    border-radius: $radius-full;
+}
+
+.badge-info {
+    background: rgba($color-info, 0.1);
+    color: $color-info;
+}
+
+.badge-neutral {
+    background: rgba($color-text-muted, 0.15);
+    color: $color-text-secondary;
+}

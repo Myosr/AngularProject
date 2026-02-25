@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 import { ProductsComponent } from './products.component';
-import { ProductService } from './product.service';
-
 @NgModule({
     declarations: [ProductsComponent],
     imports: [
@@ -12,7 +10,7 @@ import { ProductService } from './product.service';
         SharedModule,
         RouterModule.forChild([{ path: '', component: ProductsComponent }])
     ],
-    providers: [ProductService]
+    // ProductService is providedIn:'root' in the service
 })
 export class ProductsModule { }
 

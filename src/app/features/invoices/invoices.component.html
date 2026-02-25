@@ -1,0 +1,101 @@
+<div class="page">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div>
+            <h2 class="page-title">Invoices</h2>
+            <p class="page-subtitle">Manage invoices and billing</p>
+        </div>
+        <div class="page-actions" *ngIf="isAdmin">
+            <button class="btn btn-primary" (click)="openCreate()">
+                <span class="material-icons-round">receipt_long</span>
+                Add Invoice
+            </button>
+        </div>
+    </div>
+
+    <!-- Error alert -->
+    <div class="alert alert-error" *ngIf="errorMsg">
+        <span class="material-icons-round">error_outline</span>
+        {{ errorMsg }}
+    </div>
+
+    <!-- Data Table Card -->
+    <div class="card">
+        <app-data-table [columns]="columns" [data]="invoices" [loading]="loading" [canEdit]="isAdmin"
+            [canDelete]="isAdmin" emptyMessage="No invoices found." (editRow)="openEdit($event)"
+            (deleteRow)="confirmDelete($event)">
+        </app-data-table>
+    </div>
+
+    <!-- ==================== FORM PANEL ==================== -->
+    <div class="form-overlay" *ngIf="formVisible">
+        <div class="form-panel" role="dialog" [attr.aria-label]="isEditing ? 'Edit Invoice' : 'Add Invoice'">
+
+            <!-- Panel Header -->
+            <div class="panel-header">
+                <div class="panel-title-row">
+                    <span class="material-icons-round panel-icon">{{ isEditing ? 'edit' : 'receipt_long' }}</span>
+                    <h3 class="panel-title">{{ isEditing ? 'Edit Invoice' : 'New Invoice' }}</h3>
+                </div>
+                <button class="btn btn-ghost btn-icon" (click)="closeForm()" title="Close">
+                    <span class="material-icons-round">close</span>
+                </button>
+            </div>
+
+            <!-- Form -->
+            <form [formGroup]="form" (ngSubmit)="saveInvoice()" novalidate>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="inv-customer">Customer ID *</label>
+                        <input id="inv-customer" type="number" formControlName="customerID" placeholder="e.g. 1" />
+                        <span class="error-msg" *ngIf="hasError('customerID','required')">Customer ID is
+                            required.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="inv-date">Invoice Date *</label>
+                        <input id="inv-date" type="date" formControlName="invoiceDate" />
+                        <span class="error-msg" *ngIf="hasError('invoiceDate','required')">Date is required.</span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="inv-paymentDays">Payment Days *</label>
+                        <input id="inv-paymentDays" type="number" formControlName="paymentDays" min="1" />
+                        <span class="error-msg" *ngIf="hasError('paymentDays','required')">Payment days is
+                            required.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="inv-delivery">Delivery Instructions</label>
+                        <input id="inv-delivery" formControlName="deliveryInstructions" placeholder="Optional" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inv-comments">Comments</label>
+                    <textarea id="inv-comments" formControlName="comments" rows="3"
+                        placeholder="Optional notes"></textarea>
+                </div>
+
+                <div class="panel-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeForm()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="submitting">
+                        <span *ngIf="!submitting">{{ isEditing ? 'Save Changes' : 'Create Invoice' }}</span>
+                        <span *ngIf="submitting" class="spinner"></span>
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <!-- form overlay backdrop -->
+    <div class="form-backdrop" *ngIf="formVisible" (click)="closeForm()"></div>
+
+</div>
+
+<!-- Confirm Delete Modal -->
+<app-confirm-modal [visible]="showDeleteModal" title="Delete Invoice"
+    [message]="'Are you sure you want to delete &quot;' + deletingLabel + '&quot;? This action cannot be undone.'"
+    confirmLabel="Delete" (confirmed)="onDeleteConfirmed()" (cancelled)="onDeleteCancelled()">
+</app-confirm-modal>

@@ -1,0 +1,44 @@
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h2 class="page-title">
+                Notifications
+                <span class="unread-badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+            </h2>
+            <p class="page-subtitle">Stay updated with your latest activity</p>
+        </div>
+        <button class="btn btn-outline" *ngIf="unreadCount > 0" (click)="markAllRead()">
+            <span class="material-icons-round">done_all</span>
+            Mark all as read
+        </button>
+    </div>
+
+    <div class="alert alert-error" *ngIf="errorMsg">
+        <span class="material-icons-round">error_outline</span> {{ errorMsg }}
+    </div>
+
+    <div class="loading-container" *ngIf="loading">
+        <span class="spinner-lg"></span>
+        <p>Loading notifications...</p>
+    </div>
+
+    <div class="empty-state" *ngIf="!loading && notifications.length === 0">
+        <span class="material-icons-round empty-icon">notifications_none</span>
+        <h3>No notifications</h3>
+        <p>You're all caught up! New notifications will appear here.</p>
+    </div>
+
+    <div class="notif-list" *ngIf="!loading && notifications.length > 0">
+        <div class="notif-card" *ngFor="let n of notifications" [class.unread]="!n.isRead" (click)="markAsRead(n)">
+            <span class="notif-icon material-icons-round" [ngClass]="n.type">
+                {{ getIcon(n.type) }}
+            </span>
+            <div class="notif-body">
+                <h4 class="notif-title">{{ n.title }}</h4>
+                <p class="notif-message">{{ n.message }}</p>
+                <span class="notif-time">{{ getTimeAgo(n.createdAt) }}</span>
+            </div>
+            <span class="unread-dot" *ngIf="!n.isRead"></span>
+        </div>
+    </div>
+</div>

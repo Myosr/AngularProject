@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomerService } from './customer.service';
 import { AuthService } from '../../core/auth.service';
-import { Customer } from '../../models/customer.model';
+import { CustomerDto } from './customer.service';
 import { TableColumn } from '../../shared/components/data-table/data-table.component';
 
 @Component({
@@ -11,31 +11,31 @@ import { TableColumn } from '../../shared/components/data-table/data-table.compo
     styleUrls: ['./customers.component.scss']
 })
 export class CustomersComponent implements OnInit {
-    customers: Customer[] = [];
+    customers: CustomerDto[] = [];
     loading = true;
     formVisible = false;
     isEditing = false;
-    editingId: string | null = null;
+    editingId: number | null = null;
     submitting = false;
     errorMsg = '';
 
     // Confirm delete modal
     showDeleteModal = false;
-    deletingId: string | null = null;
+    deletingId: number | null = null;
     deletingName = '';
 
     form: FormGroup;
 
     columns: TableColumn[] = [
-        { key: 'name', label: 'Name', type: 'text' },
+        { key: 'customerName', label: 'Name', type: 'text' },
         { key: 'email', label: 'Email', type: 'text' },
-        { key: 'phone', label: 'Phone', type: 'text' },
-        { key: 'company', label: 'Company', type: 'text' },
+        { key: 'phoneNumber', label: 'Phone', type: 'text' },
+        { key: 'customerCategory', label: 'Company', type: 'text' },
         {
             key: 'status', label: 'Status', type: 'badge',
-            badgeMap: { active: 'badge-success', inactive: 'badge-error' }
+            badgeMap: { Active: 'badge-success', Inactive: 'badge-error' }
         },
-        { key: 'createdAt', label: 'Created', type: 'date' },
+        { key: 'accountOpenedDate', label: 'Created', type: 'date' },
     ];
 
     get isAdmin(): boolean { return this.auth.isAdmin(); }
@@ -48,9 +48,14 @@ export class CustomersComponent implements OnInit {
         this.form = this.fb.group({
             name: ['', [Validators.required, Validators.minLength(2)]],
             email: ['', [Validators.required, Validators.email]],
-            phone: [''],
-            company: [''],
+            phone: ['', Validators.required],
+            company: ['', Validators.required],
             status: ['active', Validators.required],
+            deliveryAddress: ['', Validators.required],
+            city: ['', Validators.required],
+            country: ['', Validators.required],
+            postalCode: ['', Validators.required],
+            paymentDays: [30, Validators.required],
         });
     }
 
@@ -62,7 +67,10 @@ export class CustomersComponent implements OnInit {
         this.loading = true;
         this.svc.getAll().subscribe({
             next: (data) => {
-                this.customers = data;
+                this.customers = data.map((c: any) => ({
+                    ...c,
+                    status: c.isActive ? 'Active' : 'Inactive'
+                }));
                 this.loading = false;
             },
             error: () => { this.loading = false; }
@@ -72,20 +80,23 @@ export class CustomersComponent implements OnInit {
     openCreate(): void {
         this.isEditing = false;
         this.editingId = null;
-        this.form.reset({ status: 'active' });
+        this.form.reset({
+            status: 'active',
+            paymentDays: 30
+        });
         this.formVisible = true;
         this.errorMsg = '';
     }
 
-    openEdit(customer: Customer): void {
+    openEdit(customer: CustomerDto): void {
         this.isEditing = true;
-        this.editingId = customer.id ?? null;
+        this.editingId = customer.customerID ?? null;
         this.form.patchValue({
-            name: customer.name,
+            name: customer.customerName,
             email: customer.email,
-            phone: customer.phone ?? '',
-            company: customer.company ?? '',
-            status: customer.status,
+            phone: customer.phoneNumber ?? '',
+            company: customer.customerCategory ?? '',
+            status: customer.isActive ? 'active' : 'inactive',
         });
         this.formVisible = true;
         this.errorMsg = '';
@@ -104,9 +115,23 @@ export class CustomersComponent implements OnInit {
 
         this.submitting = true;
         this.errorMsg = '';
-        const payload = this.form.value as Partial<Customer>;
+        // Map form to backend DTO
+        const formValue = this.form.value;
+        const payload: Partial<CustomerDto> = {
+            customerName: formValue.name,
+            customerCategory: formValue.company,
+            phoneNumber: formValue.phone,
+            email: formValue.email,
+            deliveryAddress: formValue.deliveryAddress,
+            city: formValue.city,
+            country: formValue.country,
+            postalCode: formValue.postalCode,
+            paymentDays: Number(formValue.paymentDays),
+            isActive: formValue.status === 'active',
+        };
+        console.log('Customer payload:', payload);
 
-        const obs = this.isEditing && this.editingId
+        const obs = this.isEditing && this.editingId !== null
             ? this.svc.update(this.editingId, payload)
             : this.svc.create(payload);
 
@@ -123,14 +148,14 @@ export class CustomersComponent implements OnInit {
         });
     }
 
-    confirmDelete(customer: Customer): void {
-        this.deletingId = customer.id ?? null;
-        this.deletingName = customer.name;
+    confirmDelete(customer: CustomerDto): void {
+        this.deletingId = customer.customerID ?? null;
+        this.deletingName = customer.customerName;
         this.showDeleteModal = true;
     }
 
     onDeleteConfirmed(): void {
-        if (!this.deletingId) return;
+        if (this.deletingId == null) return;
         this.showDeleteModal = false;
         this.svc.delete(this.deletingId).subscribe({
             next: () => this.loadCustomers(),

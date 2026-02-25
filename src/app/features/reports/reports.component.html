@@ -1,0 +1,110 @@
+<div class="page">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div>
+            <h2 class="page-title">Reports</h2>
+            <p class="page-subtitle">View sales reports and analytics</p>
+        </div>
+        <div class="page-actions">
+            <button class="btn btn-primary" (click)="loadReports()">
+                <span class="material-icons-round">refresh</span>
+                Refresh
+            </button>
+        </div>
+    </div>
+
+    <!-- Error alert -->
+    <div class="alert alert-error" *ngIf="errorMsg">
+        <span class="material-icons-round">error_outline</span>
+        {{ errorMsg }}
+    </div>
+
+    <!-- Summary KPI Cards -->
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <div class="kpi-icon" style="background: rgba(16,185,129,0.1); color: #10b981;">
+                <span class="material-icons-round">attach_money</span>
+            </div>
+            <div class="kpi-body">
+                <span class="kpi-label">Total Sales</span>
+                <span class="kpi-value">{{ formatCurrency(summary.totalSales) }}</span>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon" style="background: rgba(59,130,246,0.1); color: #3b82f6;">
+                <span class="material-icons-round">trending_up</span>
+            </div>
+            <div class="kpi-body">
+                <span class="kpi-label">Total Profit</span>
+                <span class="kpi-value">{{ formatCurrency(summary.totalProfit) }}</span>
+                <span class="kpi-sub">Margin: {{ profitMargin }}</span>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon" style="background: rgba(245,158,11,0.1); color: #f59e0b;">
+                <span class="material-icons-round">shopping_cart</span>
+            </div>
+            <div class="kpi-body">
+                <span class="kpi-label">Total Orders</span>
+                <span class="kpi-value">{{ summary.totalOrders | number }}</span>
+                <span class="kpi-sub">Avg: {{ avgOrderValue }}</span>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon" style="background: rgba(139,92,246,0.1); color: #8b5cf6;">
+                <span class="material-icons-round">people</span>
+            </div>
+            <div class="kpi-body">
+                <span class="kpi-label">Customers</span>
+                <span class="kpi-value">{{ summary.totalCustomers | number }}</span>
+                <span class="kpi-sub">YoY: {{ formatPercent(summary.salesTrend) }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Tables -->
+    <div class="report-grid">
+
+        <!-- Sales by Month -->
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">
+                    <span class="material-icons-round card-icon">calendar_month</span>
+                    Sales by Month
+                </h4>
+            </div>
+            <app-data-table [columns]="monthColumns" [data]="salesByMonth" [loading]="loading"
+                emptyMessage="No monthly data available.">
+            </app-data-table>
+        </div>
+
+        <!-- Top Products -->
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">
+                    <span class="material-icons-round card-icon">inventory_2</span>
+                    Top 10 Products by Revenue
+                </h4>
+            </div>
+            <app-data-table [columns]="productColumns" [data]="salesByProduct" [loading]="loading"
+                emptyMessage="No product data available.">
+            </app-data-table>
+        </div>
+
+        <!-- Top Customers -->
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">
+                    <span class="material-icons-round card-icon">people</span>
+                    Top 10 Customers by Revenue
+                </h4>
+            </div>
+            <app-data-table [columns]="customerColumns" [data]="salesByCustomer" [loading]="loading"
+                emptyMessage="No customer data available.">
+            </app-data-table>
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,402 @@
+@import 'variables';
+@import 'mixins';
+
+.page {
+    animation: fadeInUp .3s ease;
+}
+
+.page-header {
+    @include flex-between;
+    margin-bottom: $sp-6;
+    flex-wrap: wrap;
+    gap: $sp-4;
+}
+
+.page-title {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+}
+
+.page-subtitle {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin-top: $sp-1;
+}
+
+.page-actions {
+    display: flex;
+    gap: $sp-3;
+}
+
+.btn {
+    @include btn-reset;
+}
+
+.btn-primary {
+    background: $color-primary;
+    color: white;
+
+    &:hover {
+        background: $color-primary-dark;
+    }
+}
+
+.btn-secondary {
+    background: $color-bg-light;
+    color: $color-text-primary;
+    border: 1px solid $color-border;
+
+    &:hover {
+        background: darken($color-bg-light, 3%);
+    }
+}
+
+.btn-ghost {
+    background: transparent;
+    color: $color-text-secondary;
+
+    &:hover {
+        background: $color-bg-light;
+        color: $color-text-primary;
+    }
+}
+
+.btn-sm {
+    padding: $sp-1 $sp-2;
+    font-size: $font-size-xs;
+}
+
+.btn-lg {
+    padding: $sp-3 $sp-6;
+    font-size: $font-size-base;
+}
+
+.btn-danger {
+    &:hover {
+        background: rgba($color-error, .08);
+        color: $color-error;
+    }
+}
+
+.btn-icon {
+    padding: $sp-1;
+}
+
+.alert {
+    padding: $sp-3 $sp-4;
+    border-radius: $radius-md;
+    display: flex;
+    align-items: center;
+    gap: $sp-2;
+    margin-bottom: $sp-4;
+    font-size: $font-size-sm;
+}
+
+.alert-error {
+    background: rgba($color-error, .08);
+    color: $color-error;
+    border: 1px solid rgba($color-error, .2);
+}
+
+.alert-success {
+    background: rgba($color-success, .08);
+    color: $color-success;
+    border: 1px solid rgba($color-success, .2);
+}
+
+.loading-container {
+    @include flex-center;
+    flex-direction: column;
+    gap: $sp-3;
+    padding: $sp-12;
+    color: $color-text-secondary;
+}
+
+.spinner-lg {
+    width: 36px;
+    height: 36px;
+    border: 3px solid $color-border;
+    border-top-color: $color-primary;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+}
+
+.spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, .3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    display: inline-block;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.empty-state {
+    @include flex-center;
+    flex-direction: column;
+    padding: $sp-12;
+    color: $color-text-secondary;
+
+    &.small {
+        padding: $sp-6;
+    }
+}
+
+.empty-icon {
+    font-size: 56px;
+    opacity: .35;
+    margin-bottom: $sp-4;
+}
+
+.empty-state h3 {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin-bottom: $sp-2;
+}
+
+.card {
+    @include card;
+    overflow: hidden;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th,
+    td {
+        padding: $sp-3 $sp-4;
+        text-align: left;
+        border-bottom: 1px solid $color-border-light;
+        font-size: $font-size-sm;
+    }
+
+    th {
+        font-weight: $font-weight-semibold;
+        color: $color-text-secondary;
+        background: $color-bg-light;
+        text-transform: uppercase;
+        font-size: $font-size-xs;
+        letter-spacing: .04em;
+    }
+
+    tbody tr:hover {
+        background: rgba($color-primary, .03);
+    }
+}
+
+.font-medium {
+    font-weight: $font-weight-medium;
+}
+
+.qty-control {
+    display: inline-flex;
+    align-items: center;
+    gap: $sp-2;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    padding: 2px;
+}
+
+.qty-btn {
+    @include flex-center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: $color-bg-light;
+    border-radius: $radius-sm;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+
+    &:hover {
+        background: $color-border;
+    }
+
+    &:disabled {
+        opacity: .35;
+        cursor: not-allowed;
+    }
+}
+
+.qty-value {
+    min-width: 28px;
+    text-align: center;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+}
+
+.cart-footer {
+    padding: $sp-4 $sp-6;
+    border-top: 1px solid $color-border;
+    @include flex-between;
+    flex-wrap: wrap;
+    gap: $sp-4;
+}
+
+.cart-summary {
+    display: flex;
+    flex-direction: column;
+    gap: $sp-1;
+}
+
+.summary-label {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+}
+
+.summary-total {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+}
+
+.cart-actions {
+    display: flex;
+    gap: $sp-3;
+    align-items: center;
+}
+
+// Catalog panel
+.form-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, .45);
+    backdrop-filter: blur(3px);
+    z-index: 199;
+}
+
+.form-panel {
+    background: $color-bg-white;
+    border-radius: $radius-xl;
+    box-shadow: $shadow-xl;
+    max-width: 94vw;
+    max-height: 85vh;
+    overflow-y: auto;
+    z-index: 201;
+}
+
+.catalog-panel {
+    width: 560px;
+}
+
+.panel-header {
+    @include flex-between;
+    padding: $sp-4 $sp-6;
+    border-bottom: 1px solid $color-border;
+    position: sticky;
+    top: 0;
+    background: $color-bg-white;
+    z-index: 1;
+
+    .panel-title-row {
+        display: flex;
+        align-items: center;
+        gap: $sp-2;
+    }
+
+    .panel-icon {
+        color: $color-primary;
+        font-size: 22px;
+    }
+
+    .panel-title {
+        font-size: $font-size-lg;
+        font-weight: $font-weight-semibold;
+    }
+}
+
+.catalog-search {
+    display: flex;
+    align-items: center;
+    gap: $sp-2;
+    padding: $sp-3 $sp-6;
+    border-bottom: 1px solid $color-border-light;
+
+    .search-icon {
+        color: $color-text-muted;
+        font-size: 20px;
+    }
+
+    input {
+        border: none;
+        outline: none;
+        flex: 1;
+        font-size: $font-size-sm;
+        font-family: $font-family;
+        padding: $sp-2 0;
+    }
+}
+
+.catalog-list {
+    padding: $sp-2 0;
+    max-height: 55vh;
+    overflow-y: auto;
+    @include scrollbar;
+}
+
+.catalog-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $sp-3 $sp-6;
+    gap: $sp-4;
+
+    &:hover {
+        background: $color-bg-light;
+    }
+}
+
+.catalog-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    flex: 1;
+}
+
+.catalog-name {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-primary;
+    @include truncate;
+}
+
+.catalog-meta {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

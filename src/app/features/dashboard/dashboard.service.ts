@@ -22,4 +22,8 @@ export class DashboardService {
     getSalesByCustomer(): Observable<any[]> {
         return this.http.get<any[]>(`${this.base}/sales-by-customer`);
     }
+
+    getRecentActivity(): Observable<any[]> {
+        return this.http.get<any[]>(`${this.base}/recent-activity`);
+    }
 }

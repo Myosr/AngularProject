@@ -1,0 +1,122 @@
+<div class="page">
+
+    <div class="page-header">
+        <div>
+            <h2 class="page-title">My Profile</h2>
+            <p class="page-subtitle">View and update your account settings</p>
+        </div>
+    </div>
+
+    <div class="profile-layout">
+
+        <!-- Left: user card -->
+        <div class="profile-card">
+            <div class="avatar">{{ initials }}</div>
+            <h3 class="profile-name">{{ user?.displayName || user?.email }}</h3>
+            <span class="profile-role badge" [ngClass]="user?.role === 'Admin' ? 'badge-info' : 'badge-neutral'">
+                {{ user?.role }}
+            </span>
+            <p class="profile-email">{{ user?.email }}</p>
+            <div class="profile-meta">
+                <span class="material-icons-round">calendar_today</span>
+                Member since {{ memberSince }}
+            </div>
+        </div>
+
+        <!-- Right: forms -->
+        <div class="profile-forms">
+
+            <!-- Personal Info -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="material-icons-round card-icon">person</span>
+                    <h3 class="card-title">Personal Information</h3>
+                </div>
+
+                <div class="alert alert-success" *ngIf="profileSuccess">
+                    <span class="material-icons-round">check_circle</span> {{ profileSuccess }}
+                </div>
+                <div class="alert alert-error" *ngIf="profileError">
+                    <span class="material-icons-round">error_outline</span> {{ profileError }}
+                </div>
+
+                <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" novalidate>
+                    <div class="form-group">
+                        <label>Display Name</label>
+                        <input formControlName="displayName" placeholder="Your name" />
+                        <span class="error-msg" *ngIf="hasError(profileForm, 'displayName', 'required')">Name is
+                            required.</span>
+                        <span class="error-msg" *ngIf="hasError(profileForm, 'displayName', 'minlength')">At least 2
+                            characters.</span>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input formControlName="email" />
+                        </div>
+                        <div class="form-group">
+                            <label>Role</label>
+                            <input formControlName="role" />
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" [disabled]="profileSaving">
+                            <span class="material-icons-round btn-icon">save</span>
+                            <span *ngIf="!profileSaving">Save Changes</span>
+                            <span *ngIf="profileSaving" class="spinner"></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Change Password -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="material-icons-round card-icon">lock</span>
+                    <h3 class="card-title">Change Password</h3>
+                </div>
+
+                <div class="alert alert-success" *ngIf="passwordSuccess">
+                    <span class="material-icons-round">check_circle</span> {{ passwordSuccess }}
+                </div>
+                <div class="alert alert-error" *ngIf="passwordError">
+                    <span class="material-icons-round">error_outline</span> {{ passwordError }}
+                </div>
+
+                <form [formGroup]="passwordForm" (ngSubmit)="savePassword()" novalidate>
+                    <div class="form-group">
+                        <label>Current Password</label>
+                        <input type="password" formControlName="currentPassword" placeholder="Enter current password" />
+                        <span class="error-msg"
+                            *ngIf="hasError(passwordForm, 'currentPassword', 'required')">Required.</span>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>New Password</label>
+                            <input type="password" formControlName="newPassword" placeholder="Min 8 characters" />
+                            <span class="error-msg"
+                                *ngIf="hasError(passwordForm, 'newPassword', 'required')">Required.</span>
+                            <span class="error-msg" *ngIf="hasError(passwordForm, 'newPassword', 'minlength')">At least
+                                8 characters.</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm New Password</label>
+                            <input type="password" formControlName="confirmPassword"
+                                placeholder="Repeat new password" />
+                            <span class="error-msg"
+                                *ngIf="hasError(passwordForm, 'confirmPassword', 'required')">Required.</span>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" [disabled]="passwordSaving">
+                            <span class="material-icons-round btn-icon">lock_reset</span>
+                            <span *ngIf="!passwordSaving">Update Password</span>
+                            <span *ngIf="passwordSaving" class="spinner"></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>

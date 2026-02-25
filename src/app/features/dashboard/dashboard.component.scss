@@ -10,6 +10,12 @@
 }
 
 // --- Chart area inside a card -------------------------------
+.chart-container {
+    position: relative;
+    height: 280px;
+    padding: $sp-3;
+}
+
 .chart-placeholder {
     min-height: 220px;
     position: relative;

@@ -1,0 +1,111 @@
+<div class="page">
+    <div class="page-header">
+        <h2 class="page-title">Settings</h2>
+        <p class="page-subtitle">Manage your preferences</p>
+    </div>
+
+    <div class="toast toast-success" *ngIf="saved">
+        <span class="material-icons-round">check_circle</span>
+        Settings saved successfully!
+    </div>
+
+    <!-- Profile Info (read-only) -->
+    <section class="settings-section">
+        <h3 class="section-title">
+            <span class="material-icons-round">person</span> Profile
+        </h3>
+        <div class="form-grid">
+            <div class="form-group">
+                <label class="form-label">Display Name</label>
+                <input class="form-input" type="text" [value]="settings.displayName" disabled />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input class="form-input" type="email" [value]="settings.email" disabled />
+            </div>
+        </div>
+        <p class="section-hint">Profile information is managed through your authentication provider.</p>
+    </section>
+
+    <!-- Appearance -->
+    <section class="settings-section">
+        <h3 class="section-title">
+            <span class="material-icons-round">palette</span> Appearance
+        </h3>
+        <div class="form-group">
+            <label class="form-label">Theme</label>
+            <div class="radio-group">
+                <label class="radio-option" *ngFor="let t of [
+                    { value: 'light', label: 'Light', icon: 'light_mode' },
+                    { value: 'dark', label: 'Dark', icon: 'dark_mode' },
+                    { value: 'system', label: 'System', icon: 'settings_brightness' }
+                ]">
+                    <input type="radio" name="theme" [value]="t.value" [(ngModel)]="settings.theme" />
+                    <span class="radio-card" [class.active]="settings.theme === t.value">
+                        <span class="material-icons-round">{{ t.icon }}</span>
+                        {{ t.label }}
+                    </span>
+                </label>
+            </div>
+        </div>
+    </section>
+
+    <!-- Notifications -->
+    <section class="settings-section">
+        <h3 class="section-title">
+            <span class="material-icons-round">notifications</span> Notification Preferences
+        </h3>
+        <div class="toggle-list">
+            <div class="toggle-item">
+                <div>
+                    <p class="toggle-label">Order Updates</p>
+                    <p class="toggle-desc">Receive notifications about your order status changes</p>
+                </div>
+                <label class="toggle">
+                    <input type="checkbox" [(ngModel)]="settings.notifyOrders" />
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="toggle-item">
+                <div>
+                    <p class="toggle-label">Promotions</p>
+                    <p class="toggle-desc">Get notified about new products and special offers</p>
+                </div>
+                <label class="toggle">
+                    <input type="checkbox" [(ngModel)]="settings.notifyPromotions" />
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="toggle-item">
+                <div>
+                    <p class="toggle-label">System Notifications</p>
+                    <p class="toggle-desc">Important system messages and security alerts</p>
+                </div>
+                <label class="toggle">
+                    <input type="checkbox" [(ngModel)]="settings.notifySystem" />
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+    </section>
+
+    <!-- Language -->
+    <section class="settings-section">
+        <h3 class="section-title">
+            <span class="material-icons-round">language</span> Language
+        </h3>
+        <div class="form-group">
+            <select class="form-input select-input" [(ngModel)]="settings.language">
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+                <option value="ar">العربية</option>
+            </select>
+        </div>
+    </section>
+
+    <div class="actions">
+        <button class="btn btn-primary" (click)="save()">
+            <span class="material-icons-round">save</span> Save Settings
+        </button>
+    </div>
+</div>

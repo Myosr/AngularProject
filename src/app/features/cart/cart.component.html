@@ -1,0 +1,134 @@
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h2 class="page-title">My Cart</h2>
+            <p class="page-subtitle">Review items and proceed to checkout</p>
+        </div>
+        <div class="page-actions">
+            <button class="btn btn-primary" (click)="openCatalog()">
+                <span class="material-icons-round">add_shopping_cart</span>
+                Browse Products
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast messages -->
+    <div class="alert alert-error" *ngIf="errorMsg">
+        <span class="material-icons-round">error_outline</span> {{ errorMsg }}
+    </div>
+    <div class="alert alert-success" *ngIf="successMsg">
+        <span class="material-icons-round">check_circle</span> {{ successMsg }}
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-container" *ngIf="loading">
+        <span class="spinner-lg"></span>
+        <p>Loading cart...</p>
+    </div>
+
+    <!-- Empty cart -->
+    <div class="empty-state" *ngIf="!loading && cart.items.length === 0">
+        <span class="material-icons-round empty-icon">shopping_cart</span>
+        <h3>Your cart is empty</h3>
+        <p>Browse products and add items to get started.</p>
+        <button class="btn btn-primary" style="margin-top:16px" (click)="openCatalog()">Browse Products</button>
+    </div>
+
+    <!-- Cart items -->
+    <div class="card" *ngIf="!loading && cart.items.length > 0">
+        <div class="table-wrapper">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Unit Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of cart.items">
+                        <td class="font-medium">{{ item.productName }}</td>
+                        <td>${{ item.unitPrice | number:'1.2-2' }}</td>
+                        <td>
+                            <div class="qty-control">
+                                <button class="qty-btn" (click)="updateQty(item, -1)"
+                                    [disabled]="item.quantity <= 1">−</button>
+                                <span class="qty-value">{{ item.quantity }}</span>
+                                <button class="qty-btn" (click)="updateQty(item, 1)">+</button>
+                            </div>
+                        </td>
+                        <td class="font-medium">${{ item.total | number:'1.2-2' }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-ghost btn-danger" (click)="removeItem(item)" title="Remove">
+                                <span class="material-icons-round">delete_outline</span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="cart-footer">
+            <div class="cart-summary">
+                <span class="summary-label">Subtotal ({{ cart.itemCount }} items)</span>
+                <span class="summary-total">${{ cart.subTotal | number:'1.2-2' }}</span>
+            </div>
+            <div class="cart-actions">
+                <button class="btn btn-secondary" (click)="confirmClear()">Clear Cart</button>
+                <button class="btn btn-primary btn-lg" (click)="checkout()" [disabled]="checkingOut">
+                    <span *ngIf="!checkingOut">
+                        <span class="material-icons-round">shopping_cart_checkout</span> Checkout
+                    </span>
+                    <span *ngIf="checkingOut" class="spinner"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Catalog Panel -->
+    <div class="form-overlay" *ngIf="showCatalog">
+        <div class="form-panel catalog-panel">
+            <div class="panel-header">
+                <div class="panel-title-row">
+                    <span class="material-icons-round panel-icon">storefront</span>
+                    <h3 class="panel-title">Product Catalog</h3>
+                </div>
+                <button class="btn btn-ghost btn-icon" (click)="closeCatalog()">
+                    <span class="material-icons-round">close</span>
+                </button>
+            </div>
+
+            <div class="catalog-search">
+                <span class="material-icons-round search-icon">search</span>
+                <input type="text" [(ngModel)]="catalogSearch" placeholder="Search products..." />
+            </div>
+
+            <div class="catalog-list">
+                <div class="loading-container" *ngIf="productsLoading">
+                    <span class="spinner-lg"></span>
+                </div>
+                <div class="catalog-item" *ngFor="let p of filteredProducts">
+                    <div class="catalog-info">
+                        <span class="catalog-name">{{ p.name }}</span>
+                        <span class="catalog-meta">{{ p.category || 'No category' }} · ${{ p.price | number:'1.2-2'
+                            }}</span>
+                    </div>
+                    <button class="btn btn-sm btn-primary" (click)="addToCart(p)">
+                        <span class="material-icons-round">add</span> Add
+                    </button>
+                </div>
+                <div class="empty-state small" *ngIf="!productsLoading && filteredProducts.length === 0">
+                    <p>No products found.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-backdrop" *ngIf="showCatalog" (click)="closeCatalog()"></div>
+</div>
+
+<app-confirm-modal [visible]="showClearModal" title="Clear Cart"
+    message="Remove all items from your cart? This cannot be undone." confirmLabel="Clear All"
+    (confirmed)="onClearConfirmed()" (cancelled)="onClearCancelled()">
+</app-confirm-modal>

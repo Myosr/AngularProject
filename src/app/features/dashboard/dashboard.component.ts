@@ -1,5 +1,8 @@
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DashboardService } from './dashboard.service';
+import { ChartData, ChartOptions, Chart, registerables } from 'chart.js';
+
+Chart.register(...registerables);
 
 export interface StatCard {
     title: string;
@@ -25,6 +28,38 @@ export class DashboardComponent implements OnInit {
         { title: 'Total Customers', value: 0, icon: 'people', color: '#8b5cf6', trend: null, trendValue: '' },
     ];
 
+    /* ── Chart data objects ── */
+    salesMonthData: ChartData<'bar'> = { labels: [], datasets: [] };
+    salesMonthOptions: ChartOptions<'bar'> = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: { callback: (v) => '$' + (+v / 1e6).toFixed(1) + 'M' }
+            }
+        }
+    };
+
+    salesProductData: ChartData<'doughnut'> = { labels: [], datasets: [] };
+    salesProductOptions: ChartOptions<'doughnut'> = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 } } }
+        }
+    };
+
+    salesCustomerData: ChartData<'doughnut'> = { labels: [], datasets: [] };
+    salesCustomerOptions: ChartOptions<'doughnut'> = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 } } }
+        }
+    };
+
     salesByMonth: any[] = [];
     salesByProduct: any[] = [];
     salesByCustomer: any[] = [];
@@ -36,7 +71,7 @@ export class DashboardComponent implements OnInit {
         { key: 'amount', label: 'Amount', type: 'currency' },
         {
             key: 'status', label: 'Status', type: 'badge',
-            badgeMap: { paid: 'badge-success', pending: 'badge-warning', overdue: 'badge-error' }
+            badgeMap: { Paid: 'badge-success', Pending: 'badge-warning', Overdue: 'badge-error' }
         },
         { key: 'date', label: 'Date', type: 'date' },
     ] as any[];
@@ -59,19 +94,57 @@ export class DashboardComponent implements OnInit {
                 this.stats[2].value = r.totalOrders ?? 0;
                 this.stats[3].value = r.totalCustomers ?? 0;
 
-                // Example trend data from API
                 if (r.salesTrend != null) {
                     this.stats[0].trend = r.salesTrend >= 0 ? 'up' : 'down';
-                    this.stats[0].trendValue = `${Math.abs(r.salesTrend)}% vs last month`;
+                    this.stats[0].trendValue = `${Math.abs(r.salesTrend)}% vs last year`;
                 }
             },
             error: () => { },
             complete: () => { this.loading = false; }
         });
 
-        this.svc.getSalesByMonth().subscribe(r => this.salesByMonth = r);
-        this.svc.getSalesByProduct().subscribe(r => this.salesByProduct = r);
-        this.svc.getSalesByCustomer().subscribe(r => this.salesByCustomer = r);
+        this.svc.getSalesByMonth().subscribe(r => {
+            this.salesByMonth = r;
+            this.salesMonthData = {
+                labels: r.map(x => x.month),
+                datasets: [{
+                    data: r.map(x => x.total),
+                    backgroundColor: '#3b82f6',
+                    borderRadius: 4,
+                    label: 'Sales'
+                }]
+            };
+        });
+
+        this.svc.getSalesByProduct().subscribe(r => {
+            this.salesByProduct = r;
+            this.salesProductData = {
+                labels: r.map(x => x.product.length > 25 ? x.product.substring(0, 25) + '...' : x.product),
+                datasets: [{
+                    data: r.map(x => x.total),
+                    backgroundColor: [
+                        '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6',
+                        '#06b6d4', '#ec4899', '#f97316', '#14b8a6', '#6366f1'
+                    ]
+                }]
+            };
+        });
+
+        this.svc.getSalesByCustomer().subscribe(r => {
+            this.salesByCustomer = r;
+            this.salesCustomerData = {
+                labels: r.map(x => x.customer),
+                datasets: [{
+                    data: r.map(x => x.total),
+                    backgroundColor: [
+                        '#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6',
+                        '#06b6d4', '#ec4899', '#f97316', '#14b8a6', '#6366f1'
+                    ]
+                }]
+            };
+        });
+
+        this.svc.getRecentActivity().subscribe(r => this.recentActivity = r);
     }
 
     formatCurrency(val: number): string {

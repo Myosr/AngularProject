@@ -91,7 +91,11 @@ export class ProductsComponent implements OnInit {
 
         obs.subscribe({
             next: () => { this.submitting = false; this.closeForm(); this.loadProducts(); },
-            error: (err: any) => { this.submitting = false; this.errorMsg = err?.message ?? 'An error occurred.'; }
+            error: (err: any) => {
+                this.submitting = false;
+                this.errorMsg = err?.message || (err && typeof err === 'string' ? err : 'An error occurred.');
+                console.error('Save product error:', err);
+            }
         });
     }
 
@@ -104,7 +108,15 @@ export class ProductsComponent implements OnInit {
     onDeleteConfirmed(): void {
         if (!this.deletingId) return;
         this.showDeleteModal = false;
-        this.svc.delete(this.deletingId).subscribe({ next: () => this.loadProducts() });
+        this.submitting = true;
+        this.svc.delete(this.deletingId).subscribe({
+            next: () => { this.submitting = false; this.deletingId = null; this.loadProducts(); },
+            error: (err: any) => {
+                this.submitting = false;
+                this.errorMsg = err?.message || 'Failed to delete product.';
+                console.error('Delete product error:', err);
+            }
+        });
     }
 
     onDeleteCancelled(): void { this.showDeleteModal = false; }
