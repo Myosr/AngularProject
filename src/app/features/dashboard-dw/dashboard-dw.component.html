@@ -1,0 +1,178 @@
+<div class="page dw-dashboard">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div>
+            <h2 class="page-title">
+                <span class="material-icons-round title-icon">data_thresholding</span>
+                Data Warehouse Dashboard
+            </h2>
+            <p class="page-subtitle">Business Intelligence analytics — Sales Fact × Customer, Product, Date &amp;
+                Geography Dimensions</p>
+        </div>
+        <button class="btn btn-primary" (click)="loadData()" [disabled]="loading">
+            <span class="material-icons-round">refresh</span> Refresh
+        </button>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-bar">
+        <div class="filter-group">
+            <label class="filter-label">Date From</label>
+            <input type="date" class="filter-input" [(ngModel)]="filters.dateFrom" />
+        </div>
+        <div class="filter-group">
+            <label class="filter-label">Date To</label>
+            <input type="date" class="filter-input" [(ngModel)]="filters.dateTo" />
+        </div>
+        <div class="filter-group">
+            <label class="filter-label">Product</label>
+            <select class="filter-input filter-select" [(ngModel)]="filters.productId">
+                <option [ngValue]="null">All Products</option>
+                <option *ngFor="let p of filterOptions.products" [ngValue]="p.id">{{ p.name }}</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label class="filter-label">Territory</label>
+            <select class="filter-input filter-select" [(ngModel)]="filters.territory">
+                <option value="">All Territories</option>
+                <option *ngFor="let t of filterOptions.territories" [value]="t">{{ t }}</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label class="filter-label">Granularity</label>
+            <select class="filter-input filter-select" [(ngModel)]="granularity">
+                <option value="monthly">Monthly</option>
+                <option value="yearly">Yearly</option>
+            </select>
+        </div>
+        <div class="filter-actions">
+            <button class="btn btn-primary btn-sm" (click)="applyFilters()" [disabled]="loading">
+                <span class="material-icons-round">filter_alt</span> Apply
+            </button>
+            <button class="btn btn-outline btn-sm" (click)="resetFilters()">
+                <span class="material-icons-round">restart_alt</span> Reset
+            </button>
+        </div>
+    </div>
+
+    <!-- Error -->
+    <div class="alert alert-error" *ngIf="errorMsg">
+        <span class="material-icons-round">error_outline</span> {{ errorMsg }}
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+        <div class="kpi-card" *ngFor="let card of kpiCards" [style.--accent]="card.color">
+            <div class="kpi-icon-wrap">
+                <span class="material-icons-round">{{ card.icon }}</span>
+            </div>
+            <div class="kpi-body">
+                <span class="kpi-label">{{ card.title }}</span>
+                <span class="kpi-value" *ngIf="!loading">
+                    {{ card.format === 'currency' ? formatCurrency(getKpiValue(card.key)) :
+                    formatNumber(getKpiValue(card.key)) }}
+                </span>
+                <span class="kpi-skeleton" *ngIf="loading"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 1: Sales Trend (full width) -->
+    <div class="card chart-full">
+        <div class="card-header">
+            <h4 class="card-title">
+                <span class="material-icons-round">show_chart</span>
+                Sales Trend ({{ granularity === 'yearly' ? 'Yearly' : 'Monthly' }})
+            </h4>
+        </div>
+        <div class="chart-container tall" *ngIf="!loading && salesByDate.length > 0">
+            <canvas baseChart [type]="'bar'" [data]="dateChartData" [options]="dateChartOptions"></canvas>
+        </div>
+        <p class="chart-empty" *ngIf="!loading && salesByDate.length === 0">No data available</p>
+        <div class="chart-skeleton tall" *ngIf="loading"></div>
+    </div>
+
+    <!-- Charts Row 2: Product + Customer -->
+    <div class="charts-row">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">
+                    <span class="material-icons-round">inventory_2</span>
+                    Top Products by Revenue
+                </h4>
+            </div>
+            <div class="chart-container" *ngIf="!loading && salesByProduct.length > 0">
+                <canvas baseChart [type]="'bar'" [data]="productChartData" [options]="productChartOptions"></canvas>
+            </div>
+            <p class="chart-empty" *ngIf="!loading && salesByProduct.length === 0">No data available</p>
+            <div class="chart-skeleton" *ngIf="loading"></div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">
+                    <span class="material-icons-round">people</span>
+                    Top Customers by Revenue
+                </h4>
+            </div>
+            <div class="chart-container" *ngIf="!loading && salesByCustomer.length > 0">
+                <canvas baseChart [type]="'bar'" [data]="customerChartData" [options]="customerChartOptions"></canvas>
+            </div>
+            <p class="chart-empty" *ngIf="!loading && salesByCustomer.length === 0">No data available</p>
+            <div class="chart-skeleton" *ngIf="loading"></div>
+        </div>
+    </div>
+
+    <!-- Charts Row 3: Territory doughnut + Geography table -->
+    <div class="charts-row">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">
+                    <span class="material-icons-round">public</span>
+                    Revenue by Sales Territory
+                </h4>
+            </div>
+            <div class="chart-container" *ngIf="!loading && salesByTerritory.length > 0">
+                <canvas baseChart [type]="'doughnut'" [data]="territoryChartData"
+                    [options]="territoryChartOptions"></canvas>
+            </div>
+            <p class="chart-empty" *ngIf="!loading && salesByTerritory.length === 0">No data available</p>
+            <div class="chart-skeleton" *ngIf="loading"></div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">
+                    <span class="material-icons-round">map</span>
+                    Geography Breakdown
+                </h4>
+            </div>
+            <div class="geo-table-wrap" *ngIf="!loading && salesByGeography.length > 0">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Territory</th>
+                            <th>State</th>
+                            <th class="text-right">Revenue</th>
+                            <th class="text-right">Profit</th>
+                            <th class="text-right">Invoices</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let g of salesByGeography">
+                            <td><span class="badge badge-territory">{{ g.territory }}</span></td>
+                            <td>{{ g.state }}</td>
+                            <td class="text-right font-medium">${{ g.revenue | number:'1.0-0' }}</td>
+                            <td class="text-right">${{ g.profit | number:'1.0-0' }}</td>
+                            <td class="text-right">{{ g.invoiceCount | number }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="chart-empty" *ngIf="!loading && salesByGeography.length === 0">No data available</p>
+            <div class="chart-skeleton" *ngIf="loading"></div>
+        </div>
+    </div>
+
+</div>

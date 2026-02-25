@@ -19,6 +19,7 @@ const routes: Routes = [
       { path: 'products', loadChildren: () => import('./features/products/products.module').then(m => m.ProductsModule), canActivate: [RoleGuard], data: { roles: ['Admin'] } },
       { path: 'invoices', loadChildren: () => import('./features/invoices/invoices.module').then(m => m.InvoicesModule), canActivate: [RoleGuard], data: { roles: ['Admin'] } },
       { path: 'user-management', loadChildren: () => import('./features/user-management/user-management.module').then(m => m.UserManagementModule), canActivate: [RoleGuard], data: { roles: ['Admin'] } },
+      { path: 'dashboard-dw', loadChildren: () => import('./features/dashboard-dw/dashboard-dw.module').then(m => m.DashboardDwModule), canActivate: [RoleGuard], data: { roles: ['Admin'] } },
       { path: 'my-orders', loadChildren: () => import('./features/my-orders/my-orders.module').then(m => m.MyOrdersModule), canActivate: [RoleGuard], data: { roles: ['User'] } },
       { path: 'cart', loadChildren: () => import('./features/cart/cart.module').then(m => m.CartModule), canActivate: [RoleGuard], data: { roles: ['User'] } },
       { path: 'my-invoices', loadChildren: () => import('./features/my-invoices/my-invoices.module').then(m => m.MyInvoicesModule), canActivate: [RoleGuard], data: { roles: ['User'] } },

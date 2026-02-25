@@ -15,6 +15,7 @@ const ALL_MENU: MenuItem[] = [
     { label: 'Customers', icon: 'people', route: '/customers', roles: ['Admin'] },
     { label: 'Products', icon: 'inventory_2', route: '/products', roles: ['Admin'] },
     { label: 'Invoices', icon: 'receipt_long', route: '/invoices', roles: ['Admin'] },
+    { label: 'DashboardDW', icon: 'data_thresholding', route: '/dashboard-dw', roles: ['Admin'] },
     { label: 'My Orders', icon: 'shopping_bag', route: '/my-orders', roles: ['User'] },
     { label: 'My Cart', icon: 'shopping_cart', route: '/cart', roles: ['User'] },
     { label: 'My Invoices', icon: 'receipt', route: '/my-invoices', roles: ['User'] },
