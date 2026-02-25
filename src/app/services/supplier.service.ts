@@ -32,7 +32,7 @@ export class SupplierService {
   private baseUrl = 'https://localhost:7182/api/Suppliers';
   private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAll(): Observable<SupplierDto[]> {
     const url = this.baseUrl;

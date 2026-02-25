@@ -49,7 +49,7 @@ export class StockService {
   private baseUrl = 'https://localhost:7182/api/Stock';
   private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAll(): Observable<StockItemDto[]> {
     const url = this.baseUrl;

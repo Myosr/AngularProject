@@ -43,7 +43,7 @@ export class PurchaseOrderService {
   private baseUrl = 'https://localhost:7182/api/PurchaseOrders';
   private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAll(): Observable<PurchaseOrderDto[]> {
     const url = this.baseUrl;
